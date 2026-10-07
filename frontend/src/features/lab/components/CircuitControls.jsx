@@ -23,9 +23,9 @@ const CircuitControls = ({ numQubits, setNumQubits, shots, setShots, onClear }) 
   };
 
   return (
-    <div className="sci-panel" style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginBottom: '2rem' }}>
-      <div>
-        <label className="tech-label" style={{ display: 'block', marginBottom: '0.5rem' }}>QUBITS</label>
+    <div className="sci-panel" style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <label className="tech-label" style={{ marginBottom: '0.5rem' }}>QUBITS</label>
         <select 
           value={numQubits} 
           onChange={(e) => setNumQubits(parseInt(e.target.value, 10))}
@@ -33,8 +33,10 @@ const CircuitControls = ({ numQubits, setNumQubits, shots, setShots, onClear }) 
             backgroundColor: 'var(--bg-input)',
             color: 'var(--text-primary)',
             border: '1px solid var(--border-light)',
-            padding: '0.5rem',
-            fontFamily: 'var(--font-mono)'
+            padding: '0.5rem 1rem',
+            fontFamily: 'var(--font-mono)',
+            outline: 'none',
+            cursor: 'pointer'
           }}
         >
           <option value={1}>1</option>
@@ -43,8 +45,8 @@ const CircuitControls = ({ numQubits, setNumQubits, shots, setShots, onClear }) 
         </select>
       </div>
       
-      <div>
-        <label className="tech-label" style={{ display: 'block', marginBottom: '0.5rem' }}>SHOTS</label>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <label className="tech-label" style={{ marginBottom: '0.5rem' }}>SHOTS</label>
         <input 
           type="number" 
           value={shots}
@@ -56,17 +58,33 @@ const CircuitControls = ({ numQubits, setNumQubits, shots, setShots, onClear }) 
             backgroundColor: 'var(--bg-input)',
             color: 'var(--text-primary)',
             border: '1px solid var(--border-light)',
-            padding: '0.5rem',
+            padding: '0.5rem 1rem',
             fontFamily: 'var(--font-mono)',
-            width: '100px'
+            width: '120px',
+            outline: 'none'
           }}
         />
       </div>
 
-      <div style={{ marginLeft: 'auto' }}>
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'flex-end', paddingTop: '1.5rem' }}>
         <button 
           onClick={onClear}
-          style={{ color: 'var(--accent-red)', borderColor: 'var(--accent-red)' }}
+          style={{ 
+            color: 'var(--accent-red)', 
+            borderColor: 'var(--border-light)',
+            backgroundColor: 'transparent',
+            transition: 'all 0.2s',
+            outline: 'none',
+            cursor: 'pointer'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(248, 113, 113, 0.1)';
+            e.currentTarget.style.borderColor = 'var(--accent-red)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.borderColor = 'var(--border-light)';
+          }}
         >
           CLEAR CIRCUIT
         </button>

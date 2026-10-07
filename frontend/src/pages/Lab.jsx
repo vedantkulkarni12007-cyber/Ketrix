@@ -153,29 +153,38 @@ const Lab = () => {
   return (
     <div className="container" style={{ paddingBottom: '4rem' }}>
       <div style={{ marginBottom: '3rem' }}>
-        <div className="tech-label text-blue" style={{ marginBottom: '1rem' }}>FREE EXPERIMENTATION</div>
+        <div className="tech-label text-blue" style={{ marginBottom: '1rem', letterSpacing: '0.2em' }}>BUILD • EXECUTE • OBSERVE</div>
         <h1 style={{ fontSize: '3.5rem' }}>Quantum Lab</h1>
       </div>
 
-      <CircuitControls 
-        numQubits={numQubits} 
-        setNumQubits={setNumQubits} 
-        shots={shots} 
-        setShots={setShots} 
-        onClear={handleClear} 
-      />
+      <div style={{ marginBottom: '1rem' }}>
+        <div className="tech-label" style={{ marginBottom: '0.5rem', color: 'var(--text-dim)' }}>CONTROLS</div>
+        <CircuitControls 
+          numQubits={numQubits} 
+          setNumQubits={setNumQubits} 
+          shots={shots} 
+          setShots={setShots} 
+          onClear={handleClear} 
+        />
+      </div>
 
-      <GatePalette 
-        selectedGate={selectedGate} 
-        onSelectGate={handleSelectGate} 
-      />
+      <div style={{ marginBottom: '1rem' }}>
+        <div className="tech-label" style={{ marginBottom: '0.5rem', color: 'var(--text-dim)' }}>GATE PALETTE</div>
+        <GatePalette 
+          selectedGate={selectedGate} 
+          onSelectGate={handleSelectGate} 
+        />
+      </div>
 
-      <CircuitGrid 
-        grid={grid}
-        selectedGate={selectedGate}
-        pendingCX={pendingCX}
-        onCellClick={handleCellClick}
-      />
+      <div style={{ marginBottom: '2rem' }}>
+        <div className="tech-label" style={{ marginBottom: '0.5rem', color: 'var(--text-dim)' }}>CIRCUIT</div>
+        <CircuitGrid 
+          grid={grid}
+          selectedGate={selectedGate}
+          pendingCX={pendingCX}
+          onCellClick={handleCellClick}
+        />
+      </div>
 
       <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
         <button 
@@ -189,7 +198,21 @@ const Lab = () => {
             borderColor: 'var(--accent-blue)',
             fontWeight: 'bold',
             transition: 'all 0.2s',
-            cursor: isSimulating ? 'not-allowed' : 'pointer'
+            cursor: isSimulating ? 'not-allowed' : 'pointer',
+            boxShadow: isSimulating ? 'none' : '0 0 15px rgba(56, 189, 248, 0.2)',
+            outline: 'none'
+          }}
+          onMouseOver={(e) => {
+            if (!isSimulating) {
+              e.currentTarget.style.backgroundColor = '#7dd3fc';
+              e.currentTarget.style.boxShadow = '0 0 25px rgba(56, 189, 248, 0.4)';
+            }
+          }}
+          onMouseOut={(e) => {
+            if (!isSimulating) {
+              e.currentTarget.style.backgroundColor = 'var(--accent-blue)';
+              e.currentTarget.style.boxShadow = '0 0 15px rgba(56, 189, 248, 0.2)';
+            }
           }}
         >
           {isSimulating ? 'EXECUTING QUANTUM CIRCUIT...' : 'RUN SIMULATION'}
@@ -197,14 +220,27 @@ const Lab = () => {
       </div>
 
       {simulationError && (
-        <div className="sci-panel" style={{ marginTop: '2rem', borderColor: 'var(--accent-red)' }}>
+        <div className="sci-panel" style={{ marginTop: '3rem', borderColor: 'var(--accent-red)' }}>
           <div className="tech-label text-red" style={{ marginBottom: '0.5rem' }}>SIMULATION ERROR</div>
           <p className="text-white" style={{ margin: 0 }}>{simulationError}</p>
+          <p style={{ marginTop: '1rem', color: 'var(--text-dim)' }}>Check that the simulation backend is running and try again.</p>
+        </div>
+      )}
+
+      {!simulationResult && !simulationError && !isSimulating && (
+        <div className="sci-panel" style={{ marginTop: '3rem', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '4rem 2rem' }}>
+          <div className="tech-label" style={{ marginBottom: '1rem', color: 'var(--text-dim)' }}>NO SIMULATION DATA</div>
+          <p style={{ color: 'var(--text-secondary)', textAlign: 'center', margin: 0 }}>
+            Build a circuit and execute it<br/>to observe measurement probabilities.
+          </p>
         </div>
       )}
 
       {simulationResult && (
-        <SimulationResults result={simulationResult} />
+        <div style={{ marginTop: '3rem' }}>
+          <div className="tech-label" style={{ marginBottom: '0.5rem', color: 'var(--text-dim)' }}>RESULTS</div>
+          <SimulationResults result={simulationResult} />
+        </div>
       )}
     </div>
   );

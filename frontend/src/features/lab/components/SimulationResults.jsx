@@ -11,6 +11,8 @@ const SimulationResults = ({ result }) => {
     basisStates.push(binaryStr);
   }
 
+  const maxCount = Math.max(...Object.values(measurement_counts), 0) || actualShots;
+
   return (
     <div className="sci-panel" style={{ marginTop: '2rem' }}>
       <div className="tech-label text-amber" style={{ marginBottom: '1.5rem' }}>MEASUREMENT RESULTS</div>
@@ -21,17 +23,19 @@ const SimulationResults = ({ result }) => {
           const probability = count / actualShots;
           const percentage = (probability * 100).toFixed(1);
           
+          const isDominant = count > 0 && count === maxCount;
+
           const maxBlocks = 20;
           const numBlocks = Math.round(probability * maxBlocks);
           const barString = '█'.repeat(numBlocks).padEnd(maxBlocks, ' ');
 
           return (
             <div key={state} style={{ display: 'flex', alignItems: 'center', fontFamily: 'var(--font-mono)' }}>
-              <div style={{ width: '60px', color: 'var(--text-primary)' }}>|{state}⟩</div>
-              <div style={{ color: count > 0 ? 'var(--accent-blue)' : 'var(--border-light)', marginRight: '1rem', whiteSpace: 'pre' }}>
+              <div style={{ width: '60px', color: isDominant ? 'var(--accent-blue)' : 'var(--text-primary)', fontWeight: isDominant ? 'bold' : 'normal' }}>|{state}⟩</div>
+              <div style={{ color: count > 0 ? (isDominant ? 'var(--accent-blue)' : 'var(--border-active)') : 'var(--border-light)', marginRight: '1rem', whiteSpace: 'pre' }}>
                 {barString}
               </div>
-              <div style={{ width: '80px', textAlign: 'right', color: count > 0 ? 'var(--text-primary)' : 'var(--text-dim)' }}>
+              <div style={{ width: '80px', textAlign: 'right', color: count > 0 ? (isDominant ? 'var(--accent-green)' : 'var(--text-primary)') : 'var(--text-dim)', fontWeight: isDominant ? 'bold' : 'normal' }}>
                 {percentage}%
               </div>
             </div>
