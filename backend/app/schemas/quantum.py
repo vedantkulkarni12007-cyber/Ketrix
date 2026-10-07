@@ -23,6 +23,7 @@ class CircuitDefinition(BaseModel):
     num_qubits: int = Field(..., ge=1, le=10, description="Number of qubits in the circuit")
     operations: List[QuantumOperation] = Field(..., description="List of operations to apply")
     shots: int = Field(1024, ge=1, le=10000, description="Number of shots for the simulation")
+    return_statevector: bool = Field(False, description="Whether to extract and return the pre-measurement statevector")
 
     @model_validator(mode='after')
     def check_qubit_indices(self):
@@ -37,4 +38,5 @@ class SimulationResult(BaseModel):
     num_qubits: int
     operations: List[Dict[str, Any]]
     measurement_counts: Dict[str, int]
+    statevector: Optional[List[Dict[str, float]]] = None
     metadata: Dict[str, Any]
