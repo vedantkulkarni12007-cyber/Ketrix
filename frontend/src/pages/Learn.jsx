@@ -55,8 +55,8 @@ const Learn = () => {
             <p style={{ marginBottom: '2rem' }}>{module.description || 'Master the fundamental theories and operations of quantum mechanics.'}</p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {module.lessons.map((lesson, lIdx) => {
-                const globalIndex = mIdx * 10 + lIdx + 1; // fake ID for display
+              {module.lessons.map((lesson) => {
+                const globalIndex = lesson.expId; // Use the explicit experiment number from curriculum data
 
                 return (
                   <Link 
