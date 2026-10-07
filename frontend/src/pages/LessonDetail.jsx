@@ -7,6 +7,10 @@ import XGateLesson from '../features/lessons/x-gate/XGateLesson';
 import YGateLesson from '../features/lessons/y-gate/YGateLesson';
 import ZGateLesson from '../features/lessons/z-gate/ZGateLesson';
 import HadamardGateLesson from '../features/lessons/hadamard-gate/HadamardGateLesson';
+import CNOTGateLesson from '../features/lessons/cnot-gate/CNOTGateLesson';
+import MultipleQubitsLesson from '../features/lessons/multiple-qubits/MultipleQubitsLesson';
+import EntanglementLesson from '../features/lessons/entanglement/EntanglementLesson';
+import BellStatesLesson from '../features/lessons/bell-states/BellStatesLesson';
 
 const LessonDetail = () => {
   const { lessonId } = useParams();
@@ -25,6 +29,10 @@ const LessonDetail = () => {
   if (lessonId === 'y-gate') return <YGateLesson />;
   if (lessonId === 'z-gate') return <ZGateLesson />;
   if (lessonId === 'hadamard-gate') return <HadamardGateLesson />;
+  if (lessonId === 'cnot-gate') return <CNOTGateLesson />;
+  if (lessonId === 'multiple-qubits') return <MultipleQubitsLesson />;
+  if (lessonId === 'entanglement') return <EntanglementLesson />;
+  if (lessonId === 'bell-states') return <BellStatesLesson />;
 
   return (
     <div className="container" style={{ maxWidth: '900px' }}>

@@ -64,11 +64,16 @@ const SimulationRunner = ({ circuitDef, buttonText = "EXECUTE SIMULATION", onSim
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            {Object.keys(result.measurement_counts).sort().map((key, index) => {
-              const count = result.measurement_counts[key];
+            {Array.from({ length: Math.pow(2, result.num_qubits) }).map((_, i) => {
+              const key = i.toString(2).padStart(result.num_qubits, '0');
+              const count = result.measurement_counts[key] || 0;
+              
+              // Only show zero-count states if we have 3 or fewer qubits
+              if (result.num_qubits > 3 && count === 0) return null;
+
               const percentage = ((count / result.metadata.shots) * 100).toFixed(1);
-              const colors = ['var(--accent-blue)', 'var(--accent-amber)', '#8b5cf6', '#10b981'];
-              const color = colors[index % colors.length];
+              const colors = ['var(--accent-blue)', 'var(--accent-amber)', '#8b5cf6', '#10b981', '#f43f5e', '#0ea5e9', '#d946ef', '#f59e0b'];
+              const color = colors[i % colors.length];
               
               return (
                 <div key={key}>
