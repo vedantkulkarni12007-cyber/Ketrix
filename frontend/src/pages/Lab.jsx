@@ -2,6 +2,9 @@ import { useState, useCallback } from 'react';
 import CircuitControls from '../features/lab/components/CircuitControls';
 import GatePalette from '../features/lab/components/GatePalette';
 import CircuitGrid from '../features/lab/components/CircuitGrid';
+import SimulationResults from '../features/lab/components/SimulationResults';
+import { gridToCircuitDefinition } from '../features/lab/utils/circuitParser';
+import { simulateCircuit } from '../services/quantumApi';
 
 const COLUMNS = 8;
 const generateEmptyRow = () => Array(COLUMNS).fill(null);
@@ -13,6 +16,25 @@ const Lab = () => {
   
   const [selectedGate, setSelectedGate] = useState(null);
   const [pendingCX, setPendingCX] = useState(null);
+
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [simulationResult, setSimulationResult] = useState(null);
+  const [simulationError, setSimulationError] = useState(null);
+
+  // Clear stale results automatically when structural or configuration state changes
+  const [prevGridRef, setPrevGridRef] = useState(grid);
+  const [prevShotsRef, setPrevShotsRef] = useState(shots);
+  const [prevNumQubitsRef, setPrevNumQubitsRef] = useState(numQubits);
+
+  if (grid !== prevGridRef || shots !== prevShotsRef || numQubits !== prevNumQubitsRef) {
+    setPrevGridRef(grid);
+    setPrevShotsRef(shots);
+    setPrevNumQubitsRef(numQubits);
+    if (simulationResult || simulationError) {
+      setSimulationResult(null);
+      setSimulationError(null);
+    }
+  }
 
   const setNumQubits = useCallback((newCount) => {
     setNumQubitsState((prev) => {
@@ -108,8 +130,28 @@ const Lab = () => {
     });
   }, [selectedGate, pendingCX]);
 
+  const handleRunSimulation = async () => {
+    if (isSimulating) return;
+
+    try {
+      setIsSimulating(true);
+      setSimulationError(null);
+      setSimulationResult(null);
+
+      const circuitDef = gridToCircuitDefinition(grid, numQubits, shots);
+      const result = await simulateCircuit(circuitDef);
+      
+      setSimulationResult(result);
+    } catch (err) {
+      console.error("Simulation execution error:", err);
+      setSimulationError("Unable to execute circuit. Please verify your operations and try again.");
+    } finally {
+      setIsSimulating(false);
+    }
+  };
+
   return (
-    <div className="container">
+    <div className="container" style={{ paddingBottom: '4rem' }}>
       <div style={{ marginBottom: '3rem' }}>
         <div className="tech-label text-blue" style={{ marginBottom: '1rem' }}>FREE EXPERIMENTATION</div>
         <h1 style={{ fontSize: '3.5rem' }}>Quantum Lab</h1>
@@ -134,6 +176,36 @@ const Lab = () => {
         pendingCX={pendingCX}
         onCellClick={handleCellClick}
       />
+
+      <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+        <button 
+          onClick={handleRunSimulation}
+          disabled={isSimulating}
+          style={{ 
+            fontSize: '1.2rem', 
+            padding: '1rem 3rem',
+            backgroundColor: isSimulating ? 'var(--bg-panel)' : 'var(--accent-blue)',
+            color: isSimulating ? 'var(--text-dim)' : 'var(--bg-dark)',
+            borderColor: 'var(--accent-blue)',
+            fontWeight: 'bold',
+            transition: 'all 0.2s',
+            cursor: isSimulating ? 'not-allowed' : 'pointer'
+          }}
+        >
+          {isSimulating ? 'EXECUTING QUANTUM CIRCUIT...' : 'RUN SIMULATION'}
+        </button>
+      </div>
+
+      {simulationError && (
+        <div className="sci-panel" style={{ marginTop: '2rem', borderColor: 'var(--accent-red)' }}>
+          <div className="tech-label text-red" style={{ marginBottom: '0.5rem' }}>SIMULATION ERROR</div>
+          <p className="text-white" style={{ margin: 0 }}>{simulationError}</p>
+        </div>
+      )}
+
+      {simulationResult && (
+        <SimulationResults result={simulationResult} />
+      )}
     </div>
   );
 };
