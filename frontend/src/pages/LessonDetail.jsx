@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import QubitLesson from '../features/lessons/what-is-a-qubit/QubitLesson';
 import ClassicalVsQuantumLesson from '../features/lessons/classical-vs-quantum/ClassicalVsQuantumLesson';

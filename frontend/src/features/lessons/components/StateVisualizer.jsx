@@ -1,22 +1,15 @@
-import React from 'react';
+
+const STATE_MAP = {
+  '|0⟩': { prob0: 100, prob1: 0, title: '|0⟩', desc: 'Deterministic State 0' },
+  '|1⟩': { prob0: 0, prob1: 100, title: '|1⟩', desc: 'Deterministic State 1' },
+  '|+⟩': { prob0: 50, prob1: 50, title: '|+⟩', desc: 'Equal Superposition' },
+  '|-⟩': { prob0: 50, prob1: 50, title: '|-⟩', desc: 'Equal Superposition (Phase π)' },
+  '|i⟩': { prob0: 50, prob1: 50, title: '|i⟩', desc: 'Equal Superposition (Phase π/2)' },
+  '|-i⟩': { prob0: 50, prob1: 50, title: '|-i⟩', desc: 'Equal Superposition (Phase -π/2)' },
+};
 
 const StateVisualizer = ({ stateName }) => {
-  let prob0 = 100;
-  let prob1 = 0;
-  let title = '|0⟩';
-  let desc = 'Deterministic State 0';
-  
-  if (stateName === '|1⟩') {
-    prob0 = 0;
-    prob1 = 100;
-    title = '|1⟩';
-    desc = 'Deterministic State 1';
-  } else if (stateName === '|+⟩') {
-    prob0 = 50;
-    prob1 = 50;
-    title = '|+⟩';
-    desc = 'Equal Superposition';
-  }
+  const { prob0, prob1, title, desc } = STATE_MAP[stateName] || STATE_MAP['|0⟩'];
 
   return (
     <div style={{ 

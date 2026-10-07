@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { simulateCircuit } from '../../../services/quantumApi';
 
 const SimulationRunner = ({ circuitDef, buttonText = "EXECUTE SIMULATION", onSimulationComplete }) => {
@@ -64,17 +64,16 @@ const SimulationRunner = ({ circuitDef, buttonText = "EXECUTE SIMULATION", onSim
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            {/* Find keys 0 and 1, ensure they exist. Quantum results only return measured keys. We want to show both 0 and 1 explicitly for this lesson. */}
-            {['0', '1'].map(key => {
-              const count = result.measurement_counts[key] || 0;
+            {Object.keys(result.measurement_counts).sort().map((key, index) => {
+              const count = result.measurement_counts[key];
               const percentage = ((count / result.metadata.shots) * 100).toFixed(1);
-              const isZero = key === '0';
-              const color = isZero ? 'var(--accent-blue)' : 'var(--accent-amber)';
+              const colors = ['var(--accent-blue)', 'var(--accent-amber)', '#8b5cf6', '#10b981'];
+              const color = colors[index % colors.length];
               
               return (
                 <div key={key}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)' }}>
-                    <div style={{ color }}>STATE {key}</div>
+                    <div style={{ color }}>STATE |{key}⟩</div>
                     <div style={{ display: 'flex', gap: '2rem' }}>
                       <span style={{ color: 'var(--text-dim)' }}>COUNT: {String(count).padStart(4, '0')}</span>
                       <span style={{ color }}>{percentage.padStart(4, '0')}%</span>

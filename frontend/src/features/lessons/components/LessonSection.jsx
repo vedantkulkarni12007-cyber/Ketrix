@@ -1,4 +1,3 @@
-import React from 'react';
 
 const LessonSection = ({ number, title, children }) => {
   return (

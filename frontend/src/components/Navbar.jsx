@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
@@ -48,12 +47,9 @@ const Navbar = () => {
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           {navLinks.map((link) => {
             // Determine if active. For /learn, match /learn and /learn/what-is-a-qubit
-            let isActive = false;
-            if (link.path === '/') {
-              isActive = location.pathname === '/';
-            } else {
-              isActive = location.pathname.startsWith(link.path);
-            }
+            const isActive = link.path === '/' 
+              ? location.pathname === '/' 
+              : location.pathname.startsWith(link.path);
 
             return (
               <Link 

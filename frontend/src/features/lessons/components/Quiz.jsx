@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const Quiz = ({ questions }) => {
   const [currentIdx, setCurrentIdx] = useState(0);

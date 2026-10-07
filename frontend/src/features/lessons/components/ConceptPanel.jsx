@@ -1,4 +1,3 @@
-import React from 'react';
 
 const ConceptPanel = ({ leftTitle, leftContent, leftCode, rightTitle, rightContent, rightCode }) => {
   return (
