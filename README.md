@@ -1,6 +1,19 @@
 # Quantum Learning Platform
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 An interactive platform for learning quantum computing principles, quantum circuits, and algorithms through hands-on simulations powered by Qiskit Aer.
+
+---
+
+## Open Source
+
+Q_LEARN // LAB is an open-source quantum computing education platform designed for learning quantum computing through interactive lessons and real local quantum simulation.
+
+The project is licensed under the MIT License.
+
+Contributions, educational use, experimentation, and derivative works are welcome subject to the terms of the license. 
+*(Note: Third-party dependencies such as React, FastAPI, Qiskit, and Qiskit Aer retain their respective original licenses).*
 
 ---
 
