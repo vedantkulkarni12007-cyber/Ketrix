@@ -66,7 +66,7 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      zIndex: 1,
+                      zIndex: hasVerticalLine ? 10 : 1,
                       cursor: selectedGate || cell ? 'pointer' : 'default'
                     }}
                   >
@@ -88,7 +88,7 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
                     <div style={{
                       width: '32px',
                       height: '32px',
-                      backgroundColor: cell ? 'var(--bg-dark)' : 'var(--bg-panel)',
+                      backgroundColor: cell ? 'var(--bg-dark)' : 'transparent',
                       border: `1px solid ${isPending ? 'var(--accent-amber)' : (cell ? 'var(--accent-blue)' : 'transparent')}`,
                       borderRadius: cell && (cell.type === 'CX-C' || cell.type === 'CX-T') ? '50%' : '2px',
                       display: 'flex',
