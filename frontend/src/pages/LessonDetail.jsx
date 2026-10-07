@@ -1,6 +1,12 @@
 import { useParams, Link } from 'react-router-dom';
 import QubitLesson from '../features/lessons/what-is-a-qubit/QubitLesson';
 import ClassicalVsQuantumLesson from '../features/lessons/classical-vs-quantum/ClassicalVsQuantumLesson';
+import SuperpositionLesson from '../features/lessons/superposition/SuperpositionLesson';
+import MeasurementLesson from '../features/lessons/measurement/MeasurementLesson';
+import XGateLesson from '../features/lessons/x-gate/XGateLesson';
+import YGateLesson from '../features/lessons/y-gate/YGateLesson';
+import ZGateLesson from '../features/lessons/z-gate/ZGateLesson';
+import HadamardGateLesson from '../features/lessons/hadamard-gate/HadamardGateLesson';
 
 const LessonDetail = () => {
   const { lessonId } = useParams();
@@ -12,6 +18,13 @@ const LessonDetail = () => {
   if (lessonId === 'what-is-a-qubit') {
     return <QubitLesson />;
   }
+
+  if (lessonId === 'superposition') return <SuperpositionLesson />;
+  if (lessonId === 'measurement') return <MeasurementLesson />;
+  if (lessonId === 'x-gate') return <XGateLesson />;
+  if (lessonId === 'y-gate') return <YGateLesson />;
+  if (lessonId === 'z-gate') return <ZGateLesson />;
+  if (lessonId === 'hadamard-gate') return <HadamardGateLesson />;
 
   return (
     <div className="container" style={{ maxWidth: '900px' }}>
