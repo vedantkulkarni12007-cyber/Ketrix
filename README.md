@@ -61,9 +61,9 @@ The project is currently in **Early Alpha**.
 
 ---
 
-## Current Development — Phase 2
+## Completed Curriculum (Phase 2)
 
-Phase 2 is focused on completing the interactive quantum curriculum across three foundational stages:
+The interactive quantum curriculum is now fully complete across three foundational stages:
 
 ### Stage 1: Single-Qubit Foundations & Elementary Gates
 - **EXP-03** — Superposition

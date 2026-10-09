@@ -10,7 +10,7 @@ def simulate_quantum_circuit(circuit: CircuitDefinition):
     try:
         result = quantum_service.simulate_circuit(circuit)
         return result
-    except ValueError as e:
+    except (ValueError, IndexError) as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Simulation failed: {str(e)}")

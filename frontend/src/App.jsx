@@ -6,7 +6,6 @@ import LessonDetail from './pages/LessonDetail';
 import Lab from './pages/Lab';
 import Challenges from './pages/Challenges';
 import Dashboard from './pages/Dashboard';
-import SimulatorTest from './pages/SimulatorTest';
 import './App.css';
 
 function App() {
@@ -20,7 +19,6 @@ function App() {
           <Route path="lab" element={<Lab />} />
           <Route path="challenges" element={<Challenges />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="simulator" element={<SimulatorTest />} />
         </Route>
       </Routes>
     </Router>
