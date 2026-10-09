@@ -11,6 +11,7 @@ import CNOTGateLesson from '../features/lessons/cnot-gate/CNOTGateLesson';
 import MultipleQubitsLesson from '../features/lessons/multiple-qubits/MultipleQubitsLesson';
 import EntanglementLesson from '../features/lessons/entanglement/EntanglementLesson';
 import BellStatesLesson from '../features/lessons/bell-states/BellStatesLesson';
+import DeutschJozsaLesson from '../features/lessons/deutsch-jozsa/DeutschJozsaLesson';
 
 const LessonDetail = () => {
   const { lessonId } = useParams();
@@ -33,6 +34,7 @@ const LessonDetail = () => {
   if (lessonId === 'multiple-qubits') return <MultipleQubitsLesson />;
   if (lessonId === 'entanglement') return <EntanglementLesson />;
   if (lessonId === 'bell-states') return <BellStatesLesson />;
+  if (lessonId === 'deutsch-jozsa') return <DeutschJozsaLesson />;
 
   return (
     <div className="container" style={{ maxWidth: '900px' }}>
