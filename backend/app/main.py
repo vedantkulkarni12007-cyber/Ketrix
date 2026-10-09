@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.quantum_routes import router as quantum_router
 
-app = FastAPI(title="Quantum Learning Platform API", version="1.0.0")
+app = FastAPI(title="Ketrix API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,

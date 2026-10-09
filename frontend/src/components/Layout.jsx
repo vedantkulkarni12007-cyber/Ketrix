@@ -19,7 +19,7 @@ const Layout = () => {
         letterSpacing: '0.05em'
       }}>
         <div>SYSTEM STATUS: ONLINE // QISKIT AER BACKEND: CONNECTED</div>
-        <div style={{ marginTop: '0.5rem' }}>QUANTUM LEARNING PLATFORM v1.0.0</div>
+        <div style={{ marginTop: '0.5rem' }}>KETRIX v1.0.0</div>
       </footer>
     </div>
   );

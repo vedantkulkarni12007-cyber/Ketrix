@@ -1,14 +1,14 @@
-# Quantum Learning Platform
+# Ketrix
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An interactive platform for learning quantum computing principles, quantum circuits, and algorithms through hands-on simulations powered by Qiskit Aer.
+Ketrix: Think Beyond Classical. An interactive quantum computing platform for learning quantum concepts, building circuits, running Qiskit simulations, and exploring quantum algorithms.
 
 ---
 
 ## Open Source
 
-Q_LEARN // LAB is an open-source quantum computing education platform designed for learning quantum computing through interactive lessons and real local quantum simulation.
+Ketrix is an open-source quantum computing education platform designed for learning quantum computing through interactive lessons and real local quantum simulation.
 
 The project is licensed under the MIT License.
 

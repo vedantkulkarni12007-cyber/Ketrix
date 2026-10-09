@@ -163,8 +163,8 @@ const Home = () => {
           lineHeight: '1.1',
           textTransform: 'uppercase'
         }}>
-          Learn Quantum Computing <br/>
-          <span className="text-blue">By Experimenting With It.</span>
+          Think Beyond <br/>
+          <span className="text-blue">Classical.</span>
         </h1>
         
         <p style={{ 
@@ -173,7 +173,7 @@ const Home = () => {
           marginBottom: '3rem',
           color: 'var(--text-secondary)'
         }}>
-          Enter the laboratory. Construct quantum circuits, execute them on a real Qiskit Aer backend, and visualize the physics of computation.
+          Welcome to Ketrix. Construct quantum circuits, execute them on a real Qiskit Aer backend, and visualize the physics of computation.
         </p>
 
         <div style={{ display: 'flex', gap: '1rem' }}>

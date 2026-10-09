@@ -1,6 +1,6 @@
 # Contributing
 
-Contributions are welcome! We appreciate your help in making Q_LEARN // LAB an even better quantum computing education platform.
+Contributions are welcome! We appreciate your help in making Ketrix an even better quantum computing education platform.
 
 ## Suggested Workflow
 

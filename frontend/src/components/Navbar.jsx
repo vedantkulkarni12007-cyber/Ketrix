@@ -36,11 +36,10 @@ const Navbar = () => {
           letterSpacing: '0.1em',
           display: 'flex',
           alignItems: 'center',
-          gap: '10px'
+          gap: '12px'
         }}>
-          <span style={{ color: 'var(--accent-blue)' }}>Q_LEARN</span>
-          <span style={{ color: 'var(--border-light)' }}>//</span>
-          <span>LAB</span>
+          <img src="/logo.svg" alt="Ketrix Logo" style={{ width: '28px', height: '28px' }} />
+          <span style={{ color: 'var(--accent-blue)' }}>KETRIX</span>
         </Link>
 
         {/* Links */}
