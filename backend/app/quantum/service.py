@@ -15,27 +15,37 @@ class QuantumService:
         # Create circuit with q qubits and q classical bits
         qc = QuantumCircuit(circuit_def.num_qubits, circuit_def.num_qubits)
 
-        # Apply operations
-        for op in circuit_def.operations:
-            gate = op.gate.upper()
-            if gate == 'H':
-                qc.h(op.target)
-            elif gate == 'X':
-                qc.x(op.target)
-            elif gate == 'Y':
-                qc.y(op.target)
-            elif gate == 'Z':
-                qc.z(op.target)
-            elif gate == 'CX':
-                if op.control is not None:
-                    qc.cx(op.control, op.target)
+        def apply_gate(qc_target, op_inst):
+            gate_name = op_inst.gate.upper()
+            if gate_name == 'H':
+                qc_target.h(op_inst.target)
+            elif gate_name == 'X':
+                qc_target.x(op_inst.target)
+            elif gate_name == 'Y':
+                qc_target.y(op_inst.target)
+            elif gate_name == 'Z':
+                qc_target.z(op_inst.target)
+            elif gate_name == 'CX':
+                if op_inst.control is not None:
+                    qc_target.cx(op_inst.control, op_inst.target)
                 else:
                     raise ValueError("CX gate requires a control qubit")
-            elif gate == 'M':
+            elif gate_name == 'M':
                 # Measurement
-                qc.measure(op.target, op.target)
+                qc_target.measure(op_inst.target, op_inst.target)
             else:
-                raise ValueError(f"Unsupported gate: {gate}")
+                raise ValueError(f"Unsupported gate: {gate_name}")
+
+        # Apply operations
+        for op in circuit_def.operations:
+            condition_bit = getattr(op, 'condition_bit', None)
+            condition_val = getattr(op, 'condition_val', None)
+            
+            if condition_bit is not None and condition_val is not None:
+                with qc.if_test((qc.clbits[condition_bit], condition_val)):
+                    apply_gate(qc, op)
+            else:
+                apply_gate(qc, op)
 
         # Statevector saving vs Measurement
         statevector_data = None

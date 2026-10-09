@@ -12,6 +12,8 @@ import MultipleQubitsLesson from '../features/lessons/multiple-qubits/MultipleQu
 import EntanglementLesson from '../features/lessons/entanglement/EntanglementLesson';
 import BellStatesLesson from '../features/lessons/bell-states/BellStatesLesson';
 import DeutschJozsaLesson from '../features/lessons/deutsch-jozsa/DeutschJozsaLesson';
+import GroversLesson from '../features/lessons/grovers/GroversLesson';
+import TeleportationLesson from '../features/lessons/teleportation/TeleportationLesson';
 
 const LessonDetail = () => {
   const { lessonId } = useParams();
@@ -35,6 +37,8 @@ const LessonDetail = () => {
   if (lessonId === 'entanglement') return <EntanglementLesson />;
   if (lessonId === 'bell-states') return <BellStatesLesson />;
   if (lessonId === 'deutsch-jozsa') return <DeutschJozsaLesson />;
+  if (lessonId === 'grovers') return <GroversLesson />;
+  if (lessonId === 'teleportation') return <TeleportationLesson />;
 
   return (
     <div className="container" style={{ maxWidth: '900px' }}>

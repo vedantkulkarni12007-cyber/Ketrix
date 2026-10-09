@@ -5,6 +5,8 @@ class QuantumOperation(BaseModel):
     gate: str = Field(..., description="The gate to apply, e.g., 'H', 'X', 'Y', 'Z', 'CX', 'M'")
     target: int = Field(..., ge=0, description="Target qubit index")
     control: Optional[int] = Field(None, ge=0, description="Control qubit index, required for 2-qubit gates like 'CX'")
+    condition_bit: Optional[int] = Field(None, ge=0, description="Classical bit index to condition on")
+    condition_val: Optional[int] = Field(None, description="Value of the classical bit to match (0 or 1)")
 
     @model_validator(mode='after')
     def check_gate_requirements(self):
