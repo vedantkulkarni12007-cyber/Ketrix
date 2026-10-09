@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { curriculumData } from '../data/curriculum';
+import FadeIn from '../components/FadeIn';
 
 const Dashboard = () => {
   const [completedLessons, setCompletedLessons] = useState(() => {
@@ -31,10 +32,12 @@ const Dashboard = () => {
 
   return (
     <div className="container">
-      <div style={{ marginBottom: '3rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '2rem' }}>
-        <div className="tech-label text-blue" style={{ marginBottom: '1rem', letterSpacing: '0.2em' }}>LOCAL WORKSPACE</div>
-        <h1 style={{ fontSize: '3.5rem', textTransform: 'uppercase', margin: 0, letterSpacing: '-0.02em' }}>Dashboard</h1>
-      </div>
+      <FadeIn direction="down" distance="20px">
+        <div style={{ marginBottom: '3rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '2rem' }}>
+          <div className="tech-label text-blue" style={{ marginBottom: '1rem', letterSpacing: '0.2em' }}>LOCAL WORKSPACE</div>
+          <h1 style={{ fontSize: '3.5rem', textTransform: 'uppercase', margin: 0, letterSpacing: '-0.02em' }}>Dashboard</h1>
+        </div>
+      </FadeIn>
 
       {/* Telemetry row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '4rem' }}>

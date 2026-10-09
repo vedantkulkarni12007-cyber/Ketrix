@@ -117,6 +117,49 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Animations */
+@keyframes orbitalSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.2); }
+  50% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+  100% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.2); }
+}
+
+.animated-border {
+  position: relative;
+}
+.animated-border::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent-blue);
+  transition: width 0.3s ease;
+}
+.animated-border:hover::after {
+  width: 100%;
+}
+
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
 button:focus-visible, a:focus-visible, input:focus-visible {
   outline: 2px solid var(--accent-blue);
   outline-offset: 2px;

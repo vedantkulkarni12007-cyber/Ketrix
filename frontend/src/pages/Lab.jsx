@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import FadeIn from '../components/FadeIn';
 import CircuitControls from '../features/lab/components/CircuitControls';
 import GatePalette from '../features/lab/components/GatePalette';
 import CircuitGrid from '../features/lab/components/CircuitGrid';
@@ -162,10 +163,12 @@ const Lab = () => {
   return (
     <div className="container" style={{ paddingBottom: '4rem', maxWidth: '1400px' }}>
       
-      <div style={{ marginBottom: '3rem', paddingBottom: '2rem', borderBottom: '1px solid var(--border-light)' }}>
-        <div className="tech-label text-blue" style={{ marginBottom: '1rem', letterSpacing: '0.2em' }}>BUILD • EXECUTE • OBSERVE</div>
-        <h1 style={{ fontSize: '3.5rem', textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 }}>Quantum Laboratory</h1>
-      </div>
+      <FadeIn direction="down" distance="20px">
+        <div style={{ marginBottom: '3rem', paddingBottom: '2rem', borderBottom: '1px solid var(--border-light)' }}>
+          <div className="tech-label text-blue" style={{ marginBottom: '1rem', letterSpacing: '0.2em' }}>BUILD • EXECUTE • OBSERVE</div>
+          <h1 style={{ fontSize: '3.5rem', textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 }}>Quantum Laboratory</h1>
+        </div>
+      </FadeIn>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem', alignItems: 'flex-start' }}>
         
@@ -266,46 +269,48 @@ const Lab = () => {
           )}
 
           {simulationResult && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', animation: 'fadeIn 0.5s ease-out' }}>
-              <div className="tech-label" style={{ color: 'var(--accent-green)', letterSpacing: '0.2em' }}>SIMULATION SUCCESSFUL // DATA RECEIVED</div>
-              
-              <div className="sci-panel" style={{ padding: '1.5rem', color: 'var(--text-secondary)', borderLeft: '4px solid var(--accent-blue)', backgroundColor: 'var(--bg-panel)' }}>
-                <strong>Note:</strong> Measurement results are stochastic distributions based on {shots} shots. The statevector amplitudes represent the exact, theoretical pre-measurement pure state.
+            <FadeIn direction="up" distance="20px">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+                <div className="tech-label" style={{ color: 'var(--accent-green)', letterSpacing: '0.2em' }}>SIMULATION SUCCESSFUL // DATA RECEIVED</div>
+                
+                <div className="sci-panel" style={{ padding: '1.5rem', color: 'var(--text-secondary)', borderLeft: '4px solid var(--accent-blue)', backgroundColor: 'var(--bg-panel)' }}>
+                  <strong>Note:</strong> Measurement results are stochastic distributions based on {shots} shots. The statevector amplitudes represent the exact, theoretical pre-measurement pure state.
+                </div>
+
+                <SimulationResults result={simulationResult} />
+
+                {simulationResult.statevector ? (
+                  <CoreStateVisualizer 
+                    title="Statevector Analysis" 
+                    desc="Theoretical complex amplitudes of the pre-measurement pure state."
+                    statevector={simulationResult.statevector} 
+                  />
+                ) : (
+                  <div className="sci-panel" style={{ padding: '2rem', color: 'var(--text-dim)', textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
+                    [STATEVECTOR UNAVAILABLE] PRE-MEASUREMENT STATE DATA COULD NOT BE RETRIEVED.
+                  </div>
+                )}
+
+                {simulationResult.statevector && numQubits === 1 && (
+                  <BlochSphere 
+                    title="Bloch Sphere"
+                    description="Geometric representation of the single-qubit pure state."
+                    statevector={simulationResult.statevector} 
+                  />
+                )}
+
+                {simulationResult.statevector && numQubits > 1 && (
+                  <div className="sci-panel" style={{ padding: '3rem 2rem', textAlign: 'center', backgroundColor: 'var(--bg-panel-light)' }}>
+                    <div className="tech-label text-blue" style={{ marginBottom: '1rem' }}>BLOCH SPHERE RESTRICTION</div>
+                    <p style={{ color: 'var(--text-dim)', margin: 0, lineHeight: '1.6' }}>
+                      The Bloch Sphere geometric visualization is only mathematically defined for single-qubit pure states.
+                      <br/>
+                      This circuit contains <strong style={{ color: 'var(--text-primary)' }}>{numQubits}</strong> entangled or independent qubits.
+                    </p>
+                  </div>
+                )}
               </div>
-
-              <SimulationResults result={simulationResult} />
-
-              {simulationResult.statevector ? (
-                <CoreStateVisualizer 
-                  title="Statevector Analysis" 
-                  desc="Theoretical complex amplitudes of the pre-measurement pure state."
-                  statevector={simulationResult.statevector} 
-                />
-              ) : (
-                <div className="sci-panel" style={{ padding: '2rem', color: 'var(--text-dim)', textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
-                  [STATEVECTOR UNAVAILABLE] PRE-MEASUREMENT STATE DATA COULD NOT BE RETRIEVED.
-                </div>
-              )}
-
-              {simulationResult.statevector && numQubits === 1 && (
-                <BlochSphere 
-                  title="Bloch Sphere"
-                  description="Geometric representation of the single-qubit pure state."
-                  statevector={simulationResult.statevector} 
-                />
-              )}
-
-              {simulationResult.statevector && numQubits > 1 && (
-                <div className="sci-panel" style={{ padding: '3rem 2rem', textAlign: 'center', backgroundColor: 'var(--bg-panel-light)' }}>
-                  <div className="tech-label text-blue" style={{ marginBottom: '1rem' }}>BLOCH SPHERE RESTRICTION</div>
-                  <p style={{ color: 'var(--text-dim)', margin: 0, lineHeight: '1.6' }}>
-                    The Bloch Sphere geometric visualization is only mathematically defined for single-qubit pure states.
-                    <br/>
-                    This circuit contains <strong style={{ color: 'var(--text-primary)' }}>{numQubits}</strong> entangled or independent qubits.
-                  </p>
-                </div>
-              )}
-            </div>
+            </FadeIn>
           )}
         </div>
       </div>

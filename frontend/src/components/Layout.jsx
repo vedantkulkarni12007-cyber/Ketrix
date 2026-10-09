@@ -1,9 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
+import QuantumBackground from './QuantumBackground';
 
 const Layout = () => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', position: 'relative' }}>
+      <QuantumBackground />
       <Navbar />
       <main style={{ flex: 1, padding: '4rem 0' }}>
         <Outlet />
