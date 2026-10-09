@@ -24,6 +24,7 @@ export const gridToCircuitDefinition = (grid, numQubits, shots) => {
   return {
     num_qubits: numQubits,
     shots: shots,
-    operations: operations
+    operations: operations,
+    return_statevector: true
   };
 };

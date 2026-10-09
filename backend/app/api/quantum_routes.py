@@ -6,6 +6,7 @@ router = APIRouter()
 
 @router.post("/simulate", response_model=SimulationResult)
 def simulate_quantum_circuit(circuit: CircuitDefinition):
+    print(f"RECEIVED CIRCUIT: {circuit}")
     try:
         result = quantum_service.simulate_circuit(circuit)
         return result

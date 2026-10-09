@@ -6,9 +6,12 @@ const SimulationResults = ({ result }) => {
 
   const numStates = Math.pow(2, num_qubits);
   const basisStates = [];
+  const qiskitToTextbook = {}; // Map textbook labels to Qiskit keys
   for (let i = 0; i < numStates; i++) {
-    const binaryStr = i.toString(2).padStart(num_qubits, '0');
-    basisStates.push(binaryStr);
+    const qiskitBin = i.toString(2).padStart(num_qubits, '0');
+    const textbookBin = qiskitBin.split('').reverse().join('');
+    basisStates.push(textbookBin);
+    qiskitToTextbook[textbookBin] = qiskitBin;
   }
 
   const maxCount = Math.max(...Object.values(measurement_counts), 0) || actualShots;
@@ -19,7 +22,8 @@ const SimulationResults = ({ result }) => {
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {basisStates.map(state => {
-          const count = measurement_counts[state] || 0;
+          const qiskitKey = qiskitToTextbook[state];
+          const count = measurement_counts[qiskitKey] || 0;
           const probability = count / actualShots;
           const percentage = (probability * 100).toFixed(1);
           

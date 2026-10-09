@@ -1,4 +1,4 @@
-﻿const formatNumber = (num) => {
+const formatNumber = (num) => {
   if (Math.abs(num) < 1e-6) return '0.0000';
   const str = num.toFixed(4);
   return num >= 0 ? ` ${str}` : str;
@@ -6,11 +6,11 @@
 
 const formatPhase = (real, imag) => {
   const r2 = real * real + imag * imag;
-  if (r2 < 1e-10) return 'â€”';
+  if (r2 < 1e-10) return '—';
   let phase = Math.atan2(imag, real);
   let degrees = phase * (180 / Math.PI);
   if (degrees < 0) degrees += 360;
-  return `${degrees.toFixed(1)}Â°`;
+  return `${degrees.toFixed(1)}°`;
 };
 
 const PhaseDial = ({ real, imag, magnitude }) => {
@@ -71,7 +71,7 @@ const CoreStateVisualizer = ({ title, desc, basisStates, statevector }) => {
               return (
                 <div key={state.label} style={{ flex: 1, minWidth: '100px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <div className="tech-label" style={{ color }}>P({state.label.replace(/[|âŸ©]/g, '')})</div>
+                    <div className="tech-label" style={{ color }}>P({state.label.replace(/[|⟩]/g, '')})</div>
                     <div className="text-mono" style={{ color }}>{state.probability}%</div>
                   </div>
                   <div style={{ height: '4px', backgroundColor: 'var(--bg-panel-light)', position: 'relative' }}>
@@ -104,9 +104,11 @@ const CoreStateVisualizer = ({ title, desc, basisStates, statevector }) => {
     const i = typeof amp?.imag === 'number' ? amp.imag : 0;
     const magSq = r * r + i * i;
     const mag = Math.sqrt(magSq);
+    const binStr = index.toString(2).padStart(numQubits, '0');
+    const textbookLabel = binStr.split('').reverse().join('');
     return {
       index,
-      label: `|${index.toString(2).padStart(numQubits, '0')}âŸ©`,
+      label: `|${textbookLabel}⟩`,
       real: r,
       imag: i,
       magSq,
@@ -134,8 +136,8 @@ const CoreStateVisualizer = ({ title, desc, basisStates, statevector }) => {
                <th style={{ padding: '0.75rem', fontWeight: 'normal' }}>Basis</th>
                <th style={{ padding: '0.75rem', fontWeight: 'normal' }}>Real</th>
                <th style={{ padding: '0.75rem', fontWeight: 'normal' }}>Imag</th>
-               <th style={{ padding: '0.75rem', fontWeight: 'normal' }}>Magnitude |Î±|</th>
-               <th style={{ padding: '0.75rem', fontWeight: 'normal' }}>Prob |Î±|Â²</th>
+               <th style={{ padding: '0.75rem', fontWeight: 'normal' }}>Magnitude |α|</th>
+               <th style={{ padding: '0.75rem', fontWeight: 'normal' }}>Prob |α|²</th>
                <th style={{ padding: '0.75rem', fontWeight: 'normal' }}>Phase</th>
                <th style={{ padding: '0.75rem', fontWeight: 'normal', textAlign: 'center' }}>Amplitude</th>
              </tr>

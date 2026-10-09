@@ -41,11 +41,11 @@ class QuantumService:
         statevector_data = None
         if getattr(circuit_def, 'return_statevector', False):
             qc.save_statevector()
-        else:
-            # If no measurements were added explicitly, measure all qubits
-            if not any(op.gate.upper() == 'M' for op in circuit_def.operations):
-                for i in range(circuit_def.num_qubits):
-                    qc.measure(i, i)
+        
+        # If no measurements were added explicitly, measure all qubits
+        if not any(op.gate.upper() == 'M' for op in circuit_def.operations):
+            for i in range(circuit_def.num_qubits):
+                qc.measure(i, i)
 
         # Run simulation
         job = self.simulator.run(qc, shots=circuit_def.shots)
@@ -54,10 +54,12 @@ class QuantumService:
         if not result.success:
             raise RuntimeError(f"Simulation failed: {result.status}")
             
-        counts = {}
-        if not getattr(circuit_def, 'return_statevector', False):
+        try:
             counts = result.get_counts(qc)
-        else:
+        except Exception:
+            counts = {}
+            
+        if getattr(circuit_def, 'return_statevector', False):
             sv = result.data(0).get('statevector')
             if sv is not None:
                 statevector_data = [{"real": float(np.real(amp)), "imag": float(np.imag(amp))} for amp in np.asarray(sv)]

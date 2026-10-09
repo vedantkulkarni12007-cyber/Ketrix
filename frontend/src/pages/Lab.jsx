@@ -5,6 +5,8 @@ import CircuitGrid from '../features/lab/components/CircuitGrid';
 import SimulationResults from '../features/lab/components/SimulationResults';
 import { gridToCircuitDefinition } from '../features/lab/utils/circuitParser';
 import { simulateCircuit } from '../services/quantumApi';
+import CoreStateVisualizer from '../features/visualization/CoreStateVisualizer';
+import BlochSphere from '../features/visualization/BlochSphere';
 
 const COLUMNS = 8;
 const generateEmptyRow = () => Array(COLUMNS).fill(null);
@@ -21,26 +23,19 @@ const Lab = () => {
   const [simulationResult, setSimulationResult] = useState(null);
   const [simulationError, setSimulationError] = useState(null);
 
-  // Clear stale results automatically when structural or configuration state changes
-  const [prevGridRef, setPrevGridRef] = useState(grid);
-  const [prevShotsRef, setPrevShotsRef] = useState(shots);
-  const [prevNumQubitsRef, setPrevNumQubitsRef] = useState(numQubits);
-
-  if (grid !== prevGridRef || shots !== prevShotsRef || numQubits !== prevNumQubitsRef) {
-    setPrevGridRef(grid);
-    setPrevShotsRef(shots);
-    setPrevNumQubitsRef(numQubits);
+  const clearSimulationState = useCallback(() => {
     if (simulationResult || simulationError) {
       setSimulationResult(null);
       setSimulationError(null);
     }
-  }
+  }, [simulationResult, simulationError]);
 
   const setNumQubits = useCallback((newCount) => {
     setNumQubitsState((prev) => {
       if (newCount === prev) return prev;
       
       setPendingCX(null); // Cancel pending CX on resize
+      clearSimulationState(); // Clear stale simulation data
 
       setGrid((prevGrid) => {
         const newGrid = [...prevGrid];
@@ -66,13 +61,14 @@ const Lab = () => {
       });
       return newCount;
     });
-  }, []);
+  }, [clearSimulationState]);
 
   const handleClear = useCallback(() => {
     setGrid((prevGrid) => prevGrid.map(() => generateEmptyRow()));
     setSelectedGate(null);
     setPendingCX(null);
-  }, []);
+    clearSimulationState();
+  }, [clearSimulationState]);
 
   const handleSelectGate = useCallback((gate) => {
     setSelectedGate(gate);
@@ -80,6 +76,8 @@ const Lab = () => {
   }, []);
 
   const handleCellClick = useCallback((rIdx, cIdx) => {
+    clearSimulationState(); // Clear stale simulation data on edit
+
     setGrid((prevGrid) => {
       const newGrid = prevGrid.map(row => [...row]);
       const existingCell = newGrid[rIdx][cIdx];
@@ -128,7 +126,7 @@ const Lab = () => {
       newGrid[rIdx][cIdx] = { type: selectedGate };
       return newGrid;
     });
-  }, [selectedGate, pendingCX]);
+  }, [selectedGate, pendingCX, clearSimulationState]);
 
   const handleRunSimulation = async () => {
     if (isSimulating) return;
@@ -163,7 +161,7 @@ const Lab = () => {
           numQubits={numQubits} 
           setNumQubits={setNumQubits} 
           shots={shots} 
-          setShots={setShots} 
+          setShots={(s) => { setShots(s); clearSimulationState(); }} 
           onClear={handleClear} 
         />
       </div>
@@ -237,9 +235,45 @@ const Lab = () => {
       )}
 
       {simulationResult && (
-        <div style={{ marginTop: '3rem' }}>
-          <div className="tech-label" style={{ marginBottom: '0.5rem', color: 'var(--text-dim)' }}>RESULTS</div>
+        <div style={{ marginTop: '3rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <div className="tech-label" style={{ marginBottom: '-1rem', color: 'var(--text-dim)' }}>RESULTS</div>
+          
+          <div className="sci-panel" style={{ padding: '1rem 1.5rem', color: 'var(--text-secondary)', borderLeft: '4px solid var(--accent-blue)', backgroundColor: 'var(--bg-panel-light)' }}>
+            <strong>Note:</strong> Measurement results are stochastic (based on the number of shots), while the statevector amplitudes represent the exact, theoretical pre-measurement pure state.
+          </div>
+
           <SimulationResults result={simulationResult} />
+
+          {simulationResult.statevector ? (
+            <CoreStateVisualizer 
+              title="Statevector Analysis" 
+              desc="Theoretical complex amplitudes of the pre-measurement pure state."
+              statevector={simulationResult.statevector} 
+            />
+          ) : (
+            <div className="sci-panel" style={{ padding: '1.5rem', color: 'var(--text-dim)', textAlign: 'center' }}>
+              [STATEVECTOR UNAVAILABLE] Pre-measurement state data could not be retrieved.
+            </div>
+          )}
+
+          {simulationResult.statevector && numQubits === 1 && (
+            <BlochSphere 
+              title="Bloch Sphere"
+              description="Geometric representation of the single-qubit pure state."
+              statevector={simulationResult.statevector} 
+            />
+          )}
+
+          {simulationResult.statevector && numQubits > 1 && (
+            <div className="sci-panel" style={{ padding: '2rem', textAlign: 'center' }}>
+              <div className="tech-label text-blue" style={{ marginBottom: '1rem' }}>BLOCH SPHERE</div>
+              <p style={{ color: 'var(--text-dim)', margin: 0 }}>
+                The Bloch Sphere geometric visualization is only supported for single-qubit pure states.
+                <br/>
+                This circuit contains {numQubits} qubits.
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>

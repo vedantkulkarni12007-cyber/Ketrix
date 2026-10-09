@@ -147,5 +147,34 @@ class TestQuantumStatevector(unittest.TestCase):
             quantum_service.simulate_circuit(circuit)
         self.assertIn("incompatible with statevector extraction", str(context.exception))
 
+    def test_cx_behavior(self):
+        # Prepare control qubit |1> using X, apply CX
+        # q0 is control, q1 is target
+        circuit = CircuitDefinition(
+            num_qubits=2,
+            operations=[
+                QuantumOperation(gate='X', target=0),
+                QuantumOperation(gate='CX', control=0, target=1)
+            ],
+            shots=1000,
+            return_statevector=True
+        )
+        result = quantum_service.simulate_circuit(circuit)
+        sv = result.get('statevector')
+        self.assertIsNotNone(sv)
+        
+        # After X(0), state is |01> (q1=0, q0=1).
+        # After CX(control=0, target=1), state becomes |11> (q1=1, q0=1).
+        # In Qiskit, |11> is index 3.
+        self.assertAlmostEqual(sv[0]['real'], 0.0, places=5)
+        self.assertAlmostEqual(sv[1]['real'], 0.0, places=5)
+        self.assertAlmostEqual(sv[2]['real'], 0.0, places=5)
+        self.assertAlmostEqual(sv[3]['real'], 1.0, places=5)
+        
+        # Check measurement counts too
+        counts = result.get('measurement_counts')
+        self.assertIn('11', counts)
+        self.assertEqual(counts['11'], 1000)
+
 if __name__ == '__main__':
     unittest.main()

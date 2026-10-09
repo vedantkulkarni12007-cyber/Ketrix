@@ -16,7 +16,7 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
         {/* Timeline Header */}
         <div style={{ display: 'flex', marginLeft: '60px' }}>
           {Array.from({ length: numCols }).map((_, col) => (
-            <div key={`col-${col}`} className="tech-label" style={{ width: '60px', textAlign: 'center', color: 'var(--text-dim)' }}>
+            <div key={`col-${col}`} className="tech-label" style={{ width: '60px', flexShrink: 0, textAlign: 'center', color: 'var(--text-dim)' }}>
               T{col}
             </div>
           ))}
@@ -26,7 +26,7 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
         {grid.map((row, rIdx) => (
           <div key={`row-${rIdx}`} style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
             {/* Row Label */}
-            <div className="tech-label text-blue" style={{ width: '60px', fontWeight: 'bold' }}>
+            <div className="tech-label text-blue" style={{ width: '60px', flexShrink: 0, fontWeight: 'bold' }}>
               q{rIdx}
             </div>
 
@@ -66,6 +66,7 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      flexShrink: 0,
                       zIndex: hasVerticalLine ? 10 : 1,
                       cursor: selectedGate || cell ? 'pointer' : 'default'
                     }}
@@ -88,8 +89,8 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
                     <div style={{
                       width: '32px',
                       height: '32px',
-                      backgroundColor: cell ? 'var(--bg-dark)' : 'transparent',
-                      border: `1px solid ${isPending ? 'var(--accent-amber)' : (cell ? 'var(--accent-blue)' : 'transparent')}`,
+                      backgroundColor: cell ? 'var(--bg-dark)' : 'rgba(42, 47, 58, 0.3)',
+                      border: `1px solid ${isPending ? 'var(--accent-amber)' : (cell ? 'var(--accent-blue)' : 'var(--border-active)')}`,
                       borderRadius: cell && (cell.type === 'CX-C' || cell.type === 'CX-T') ? '50%' : '2px',
                       display: 'flex',
                       alignItems: 'center',
