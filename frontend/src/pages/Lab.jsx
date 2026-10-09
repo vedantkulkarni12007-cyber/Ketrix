@@ -186,27 +186,27 @@ const Lab = () => {
             style={{ 
               fontSize: '1.1rem', 
               padding: '1.2rem',
-              backgroundColor: isSimulating ? 'var(--bg-panel)' : 'var(--accent-blue)',
-              color: isSimulating ? 'var(--text-dim)' : 'var(--bg-dark)',
-              borderColor: 'var(--accent-blue)',
+              backgroundColor: isSimulating ? 'var(--bg-panel)' : 'var(--bg-dark)',
+              color: isSimulating ? 'var(--text-dim)' : 'var(--accent-blue)',
+              border: '1px solid var(--accent-blue)',
               fontWeight: 'bold',
               transition: 'all 0.2s',
               cursor: isSimulating ? 'not-allowed' : 'pointer',
-              boxShadow: isSimulating ? 'none' : '0 0 20px rgba(56, 189, 248, 0.25)',
               outline: 'none',
               width: '100%',
-              textAlign: 'center'
+              textAlign: 'center',
+              animation: isSimulating ? 'pulseOpacity 1.5s infinite' : 'none'
             }}
             onMouseOver={(e) => {
               if (!isSimulating) {
-                e.currentTarget.style.backgroundColor = '#7dd3fc';
-                e.currentTarget.style.boxShadow = '0 0 30px rgba(56, 189, 248, 0.4)';
+                e.currentTarget.style.backgroundColor = 'var(--accent-blue)';
+                e.currentTarget.style.color = 'var(--bg-dark)';
               }
             }}
             onMouseOut={(e) => {
               if (!isSimulating) {
-                e.currentTarget.style.backgroundColor = 'var(--accent-blue)';
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(56, 189, 248, 0.25)';
+                e.currentTarget.style.backgroundColor = 'var(--bg-dark)';
+                e.currentTarget.style.color = 'var(--accent-blue)';
               }
             }}
           >
@@ -301,6 +301,11 @@ const Lab = () => {
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseOpacity {
+          0% { opacity: 0.5; }
+          50% { opacity: 1; }
+          100% { opacity: 0.5; }
         }
       `}</style>
     </div>

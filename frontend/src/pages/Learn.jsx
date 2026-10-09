@@ -23,8 +23,8 @@ const Learn = () => {
             top: 0, 
             bottom: 0, 
             left: '11px', 
-            width: '2px', 
-            background: 'linear-gradient(to bottom, var(--accent-blue), var(--border-light) 20%)'
+            width: '1px', 
+            backgroundColor: 'var(--border-light)'
           }} />
 
           {curriculumData.map((module, mIdx) => (
@@ -37,14 +37,13 @@ const Learn = () => {
               }}>
                  <div style={{
                    position: 'absolute',
-                   left: '5px',
+                   left: '6px',
                    top: '6px',
-                   width: '14px',
-                   height: '14px',
+                   width: '12px',
+                   height: '12px',
                    backgroundColor: 'var(--bg-dark)',
-                   border: '2px solid var(--accent-blue)',
+                   border: '1px solid var(--accent-blue)',
                    borderRadius: '50%',
-                   boxShadow: '0 0 10px rgba(56, 189, 248, 0.5)',
                    zIndex: 2
                  }} />
               </div>
@@ -67,13 +66,12 @@ const Learn = () => {
                       to={`/learn/${lesson.id}`}
                       style={{ textDecoration: 'none', position: 'relative', display: 'block' }}
                     >
-                      {/* Sub-wire horizontal connection */}
                       <div style={{
                         position: 'absolute',
                         left: '-2.5rem',
                         top: '50%',
                         width: '2.5rem',
-                        height: '2px',
+                        height: '1px',
                         backgroundColor: 'var(--border-light)',
                         zIndex: 0
                       }} />
@@ -84,19 +82,17 @@ const Learn = () => {
                         alignItems: 'center', 
                         gap: '2rem',
                         transition: 'all 0.2s ease',
-                        transform: 'translateX(0)',
                         cursor: 'pointer',
-                        backgroundColor: 'var(--bg-dark)'
+                        backgroundColor: 'var(--bg-panel)',
+                        transform: 'translateX(0)'
                       }}
                       onMouseEnter={(e) => { 
-                        e.currentTarget.style.transform = 'translateX(8px)'; 
                         e.currentTarget.style.borderColor = 'var(--accent-blue)'; 
-                        e.currentTarget.style.boxShadow = '0 0 20px rgba(56, 189, 248, 0.05)';
+                        e.currentTarget.style.transform = 'translateX(4px)';
                       }}
                       onMouseLeave={(e) => { 
-                        e.currentTarget.style.transform = 'translateX(0)'; 
                         e.currentTarget.style.borderColor = 'var(--border-light)'; 
-                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.transform = 'translateX(0)';
                       }}
                       >
                         <div className="tech-label" style={{ 

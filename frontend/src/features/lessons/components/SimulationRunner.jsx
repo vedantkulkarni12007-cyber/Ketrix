@@ -50,7 +50,8 @@ const SimulationRunner = ({ circuitDef, buttonText = "EXECUTE SIMULATION", onSim
         <div style={{ 
           backgroundColor: 'var(--bg-dark)', 
           border: '1px solid var(--border-light)',
-          padding: '2rem'
+          padding: '2rem',
+          animation: 'fadeIn 0.4s ease-out'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)', paddingBottom: '1rem', marginBottom: '2rem' }}>
             <div>
@@ -104,6 +105,10 @@ const SimulationRunner = ({ circuitDef, buttonText = "EXECUTE SIMULATION", onSim
         @keyframes growRight {
           from { transform: scaleX(0); }
           to { transform: scaleX(1); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>

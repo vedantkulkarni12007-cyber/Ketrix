@@ -26,7 +26,7 @@ const GatePalette = ({ selectedGate, onSelectGate }) => {
                 transition: 'all 0.2s ease-in-out',
                 outline: 'none',
                 cursor: 'pointer',
-                boxShadow: isSelected ? '0 0 10px rgba(56, 189, 248, 0.2)' : 'none'
+                border: isSelected ? '1px solid var(--accent-blue)' : '1px solid var(--border-light)'
               }}
               onMouseOver={(e) => {
                 if (!isSelected) {

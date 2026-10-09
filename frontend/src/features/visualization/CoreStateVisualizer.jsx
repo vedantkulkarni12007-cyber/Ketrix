@@ -80,7 +80,7 @@ const CoreStateVisualizer = ({ title, desc, basisStates, statevector }) => {
                       top: 0, left: 0, bottom: 0,
                       width: `${state.probability}%`,
                       backgroundColor: color,
-                      boxShadow: `0 0 10px ${color}`,
+                      borderRadius: '2px',
                       transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
                     }}></div>
                   </div>
@@ -162,8 +162,7 @@ const CoreStateVisualizer = ({ title, desc, basisStates, statevector }) => {
                           <div style={{
                             position: 'absolute', top: 0, left: 0, bottom: 0,
                             width: `${s.probPercent}%`,
-                            backgroundColor: 'var(--accent-blue)',
-                            boxShadow: isZero ? 'none' : '0 0 8px var(--accent-blue)'
+                            backgroundColor: 'var(--accent-blue)'
                           }} />
                         </div>
                       </div>

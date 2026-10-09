@@ -7,7 +7,7 @@ const Home = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPulsePos(p => (p >= 100 ? 0 : p + 2));
+      setPulsePos(p => (p >= 100 ? 0 : p + 1.5));
     }, 50);
     return () => clearInterval(interval);
   }, []);
@@ -27,7 +27,7 @@ const Home = () => {
         
         {/* Left Column: Copy & CTAs */}
         <div style={{ flex: '1 1 500px' }}>
-          <div className="tech-label" style={{ color: 'var(--accent-blue)', marginBottom: '1.5rem', letterSpacing: '0.2em' }}>
+          <div className="tech-label" style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', letterSpacing: '0.2em' }}>
             QUANTUM COMPUTING PLATFORM
           </div>
           <h1 style={{ 
@@ -35,16 +35,11 @@ const Home = () => {
             fontSize: '4.5rem',
             lineHeight: '1.05',
             textTransform: 'uppercase',
-            letterSpacing: '-0.02em'
+            letterSpacing: '-0.02em',
+            color: 'var(--text-primary)'
           }}>
             Think Beyond <br/>
-            <span style={{ 
-              background: 'linear-gradient(90deg, var(--accent-blue), #8b5cf6)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>
-              Classical.
-            </span>
+            <span style={{ color: 'var(--accent-blue)' }}>Classical.</span>
           </h1>
           
           <p style={{ 
@@ -73,19 +68,6 @@ const Home = () => {
 
         {/* Right Column: Animated Circuit Hero */}
         <div style={{ flex: '1 1 500px', position: 'relative' }}>
-          {/* Subtle glow behind the panel */}
-          <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '80%',
-            height: '80%',
-            background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(11, 12, 16, 0) 70%)',
-            zIndex: 0,
-            pointerEvents: 'none'
-          }} />
-
           <div className="sci-panel" style={{ 
             padding: '4rem 3rem', 
             display: 'flex', 
@@ -93,35 +75,33 @@ const Home = () => {
             gap: '4rem', 
             position: 'relative',
             zIndex: 1,
-            backgroundColor: 'rgba(21, 23, 30, 0.8)',
-            backdropFilter: 'blur(10px)'
+            backgroundColor: 'var(--bg-panel)'
           }}>
             
             <div className="tech-label" style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', color: 'var(--text-dim)' }}>
-              LIVE SIMULATION // ID: EXP-001
+              LIVE DIAGRAM // EXP-001
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative', marginTop: '2rem' }}>
-              <div className="tech-label" style={{ width: '40px', color: 'var(--accent-blue)' }}>q0</div>
-              <div style={{ flex: 1, height: '2px', backgroundColor: 'var(--border-light)', position: 'relative' }}>
+              <div className="tech-label" style={{ width: '40px', color: 'var(--text-secondary)' }}>q0</div>
+              <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--border-light)', position: 'relative' }}>
+                {/* The moving "particle" or evaluation front */}
                 <div style={{ 
                   position: 'absolute', 
-                  top: '-4px', 
+                  top: '-3px', 
                   left: `${pulsePos}%`, 
-                  width: '10px', 
-                  height: '10px', 
+                  width: '7px', 
+                  height: '7px', 
                   backgroundColor: 'var(--accent-blue)',
-                  borderRadius: '50%',
-                  boxShadow: '0 0 10px var(--accent-blue)',
                   opacity: pulsePos < 80 ? 1 : 0
                 }} />
                 
                 <div style={{
                   position: 'absolute',
-                  top: '-24px',
+                  top: '-20px',
                   left: '25%',
-                  width: '48px',
-                  height: '48px',
+                  width: '40px',
+                  height: '40px',
                   backgroundColor: 'var(--bg-panel-light)',
                   border: pulsePos > 25 ? '1px solid var(--accent-blue)' : '1px solid var(--border-light)',
                   display: 'flex',
@@ -129,36 +109,35 @@ const Home = () => {
                   justifyContent: 'center',
                   fontFamily: 'var(--font-mono)',
                   color: pulsePos > 25 ? 'var(--accent-blue)' : 'var(--text-secondary)',
-                  transition: 'all 0.3s'
+                  transition: 'border-color 0.3s, color 0.3s'
                 }}>H</div>
 
                 <div style={{
                   position: 'absolute',
-                  top: '-4px',
+                  top: '-3px',
                   left: '60%',
-                  width: '10px',
-                  height: '10px',
+                  width: '7px',
+                  height: '7px',
                   backgroundColor: pulsePos > 60 ? 'var(--accent-blue)' : 'var(--border-light)',
-                  borderRadius: '50%',
-                  transition: 'all 0.3s'
+                  transition: 'background-color 0.3s'
                 }}></div>
                 {/* Vertical line down to q1 */}
                 <div style={{
                   position: 'absolute',
                   top: '0',
                   left: '60%',
-                  width: '2px',
-                  height: '112px', // reaches q1 wire (gap is 4rem = 64px, + 48px sizes)
+                  width: '1px',
+                  height: '104px', // reaches q1 wire (gap is 4rem = 64px, + 40px sizes)
                   backgroundColor: pulsePos > 60 ? 'var(--accent-blue)' : 'var(--border-light)',
-                  transition: 'all 0.3s'
+                  transition: 'background-color 0.3s'
                 }}></div>
 
                 <div style={{
                   position: 'absolute',
                   top: '-15px',
                   right: '5%',
-                  width: '32px',
-                  height: '32px',
+                  width: '30px',
+                  height: '30px',
                   backgroundColor: 'var(--bg-panel)',
                   border: '1px solid var(--accent-amber)',
                   display: 'flex',
@@ -166,7 +145,7 @@ const Home = () => {
                   justifyContent: 'center',
                   color: 'var(--accent-amber)'
                 }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M12 2v20M2 12h20M12 12l8-8" />
                     <circle cx="12" cy="12" r="10" />
                   </svg>
@@ -175,15 +154,15 @@ const Home = () => {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative' }}>
-              <div className="tech-label" style={{ width: '40px' }}>q1</div>
-              <div style={{ flex: 1, height: '2px', backgroundColor: 'var(--border-light)', position: 'relative' }}>
+              <div className="tech-label" style={{ width: '40px', color: 'var(--text-secondary)' }}>q1</div>
+              <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--border-light)', position: 'relative' }}>
                 
                 <div style={{
                   position: 'absolute',
-                  top: '-24px',
-                  left: 'calc(60% - 24px)', // aligned with control dot
-                  width: '48px',
-                  height: '48px',
+                  top: '-20px',
+                  left: 'calc(60% - 20px)', // aligned with control dot
+                  width: '40px',
+                  height: '40px',
                   backgroundColor: 'var(--bg-panel-light)',
                   border: pulsePos > 60 ? '1px solid var(--accent-blue)' : '1px solid var(--border-light)',
                   borderRadius: '50%',
@@ -192,15 +171,15 @@ const Home = () => {
                   justifyContent: 'center',
                   fontFamily: 'var(--font-mono)',
                   color: pulsePos > 60 ? 'var(--accent-blue)' : 'var(--text-secondary)',
-                  transition: 'all 0.3s'
+                  transition: 'border-color 0.3s, color 0.3s'
                 }}>X</div>
 
                 <div style={{
                   position: 'absolute',
                   top: '-15px',
                   right: '5%',
-                  width: '32px',
-                  height: '32px',
+                  width: '30px',
+                  height: '30px',
                   backgroundColor: 'var(--bg-panel)',
                   border: '1px solid var(--accent-amber)',
                   display: 'flex',
@@ -208,7 +187,7 @@ const Home = () => {
                   justifyContent: 'center',
                   color: 'var(--accent-amber)'
                 }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M12 2v20M2 12h20M12 12l8-8" />
                     <circle cx="12" cy="12" r="10" />
                   </svg>
@@ -240,7 +219,7 @@ const Home = () => {
         display: 'grid', 
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
         gap: '2rem',
-        marginTop: '4rem',
+        marginTop: '2rem',
         paddingTop: '4rem',
         borderTop: '1px solid var(--border-light)'
       }}>
@@ -258,8 +237,8 @@ const Home = () => {
 
         <div className="sci-panel">
           <div className="tech-label" style={{ marginBottom: '1rem' }}>SYS.03</div>
-          <h3 style={{ marginBottom: '1rem' }}>Laboratory Challenges</h3>
-          <p>Prove your understanding by solving precise state preparation challenges using constrained gate sets.</p>
+          <h3 style={{ marginBottom: '1rem' }}>Laboratory Environment</h3>
+          <p>Construct complex quantum circuits in an unrestricted sandbox to observe state vectors and measurement distributions.</p>
         </div>
       </section>
     </div>

@@ -90,7 +90,7 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
                       width: '32px',
                       height: '32px',
                       backgroundColor: cell ? 'var(--bg-dark)' : 'rgba(42, 47, 58, 0.3)',
-                      border: `1px solid ${isPending ? 'var(--accent-amber)' : (cell ? 'var(--accent-blue)' : 'var(--border-active)')}`,
+                      border: isPending ? '1px dashed var(--accent-amber)' : (cell ? '1px solid var(--accent-blue)' : '1px dashed var(--border-active)'),
                       borderRadius: cell && (cell.type === 'CX-C' || cell.type === 'CX-T') ? '50%' : '2px',
                       display: 'flex',
                       alignItems: 'center',
@@ -98,8 +98,7 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
                       fontFamily: 'var(--font-mono)',
                       fontSize: '0.9rem',
                       color: isPending ? 'var(--accent-amber)' : 'var(--accent-blue)',
-                      transition: 'all 0.2s',
-                      boxShadow: isPending ? '0 0 10px rgba(251, 146, 60, 0.3)' : 'none'
+                      transition: 'all 0.2s'
                     }}>
                       {cell && cell.type === 'CX-C' ? '●' : null}
                       {cell && cell.type === 'CX-T' ? 'X' : null}

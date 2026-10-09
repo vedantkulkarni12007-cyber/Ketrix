@@ -33,19 +33,18 @@ const SimulatorCatalogue = () => {
               height: '100%', 
               display: 'flex', 
               flexDirection: 'column', 
-              transition: 'all 0.25s ease-out', 
+              transition: 'all 0.2s ease', 
               cursor: 'pointer',
-              backgroundColor: 'var(--bg-dark)'
+              backgroundColor: 'var(--bg-panel)',
+              transform: 'translateY(0)'
             }}
                  onMouseOver={(e) => {
-                   e.currentTarget.style.transform = 'translateY(-4px)';
                    e.currentTarget.style.borderColor = 'var(--accent-blue)';
-                   e.currentTarget.style.boxShadow = '0 10px 30px rgba(56, 189, 248, 0.05)';
+                   e.currentTarget.style.transform = 'translateY(-2px)';
                  }}
                  onMouseOut={(e) => {
-                   e.currentTarget.style.transform = 'translateY(0)';
                    e.currentTarget.style.borderColor = 'var(--border-light)';
-                   e.currentTarget.style.boxShadow = 'none';
+                   e.currentTarget.style.transform = 'translateY(0)';
                  }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', alignItems: 'center' }}>

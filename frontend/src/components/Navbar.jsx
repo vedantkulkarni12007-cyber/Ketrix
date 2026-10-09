@@ -74,8 +74,7 @@ const Navbar = () => {
                     top: '20%',
                     height: '60%',
                     width: '2px',
-                    backgroundColor: 'var(--accent-blue)',
-                    boxShadow: '0 0 8px var(--accent-blue)'
+                    backgroundColor: 'var(--accent-blue)'
                   }} />
                 )}
                 [{link.name}]
