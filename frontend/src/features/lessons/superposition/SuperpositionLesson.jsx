@@ -95,7 +95,7 @@ const SuperpositionLesson = () => {
             <Link to="/learn/measurement"><button style={{ backgroundColor: 'var(--accent-blue)', color: 'var(--bg-dark)' }}>INITIATE NEXT EXPERIMENT &rarr;</button></Link>
           </div>
         ) : (
-          <button onClick={() => setLessonComplete(true)} style={{ borderColor: 'var(--accent-green)', color: 'var(--accent-green)' }}>MARK EXPERIMENT COMPLETE</button>
+          <button onClick={() => { setLessonComplete(true); try { const id = window.location.pathname.split('/').pop(); const saved = JSON.parse(localStorage.getItem('ketrix_completed_lessons') || '[]'); if(!saved.includes(id)) { saved.push(id); localStorage.setItem('ketrix_completed_lessons', JSON.stringify(saved)); } } catch(e){} }} style={{ borderColor: 'var(--accent-green)', color: 'var(--accent-green)' }}>MARK EXPERIMENT COMPLETE</button>
         )}
       </div>
     </LessonLayout>

@@ -59,7 +59,7 @@ const HadamardGateLesson = () => {
       </LessonSection>
 
       <div style={{ textAlign: 'center', padding: '2rem 0', borderTop: '1px solid var(--border-light)' }}>
-        {lessonComplete ? <div><Link to="/learn"><button style={{ backgroundColor: 'var(--accent-blue)', color: 'var(--bg-dark)' }}>RETURN TO CURRICULUM &rarr;</button></Link></div> : <button onClick={() => setLessonComplete(true)} style={{ borderColor: 'var(--accent-green)', color: 'var(--accent-green)' }}>MARK EXPERIMENT COMPLETE</button>}
+        {lessonComplete ? <div><Link to="/learn"><button style={{ backgroundColor: 'var(--accent-blue)', color: 'var(--bg-dark)' }}>RETURN TO CURRICULUM &rarr;</button></Link></div> : <button onClick={() => { setLessonComplete(true); try { const id = window.location.pathname.split('/').pop(); const saved = JSON.parse(localStorage.getItem('ketrix_completed_lessons') || '[]'); if(!saved.includes(id)) { saved.push(id); localStorage.setItem('ketrix_completed_lessons', JSON.stringify(saved)); } } catch(e){} }} style={{ borderColor: 'var(--accent-green)', color: 'var(--accent-green)' }}>MARK EXPERIMENT COMPLETE</button>}
       </div>
     </LessonLayout>
   );

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { curriculumData } from '../data/curriculum';
+import WaveInterference from '../features/visualization/WaveInterference';
 
 const Learn = () => {
   return (
@@ -12,6 +13,10 @@ const Learn = () => {
           Follow the operational pathway from basic computational states to complex multi-qubit algorithms. 
           Each module provides interactive experiments executed directly on our Qiskit Aer simulation engine.
         </p>
+      </div>
+
+      <div style={{ marginBottom: '4rem' }}>
+        <WaveInterference />
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'flex-start' }}>

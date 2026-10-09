@@ -1,4 +1,4 @@
-const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
+const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick, isSimulating }) => {
   const numCols = grid[0]?.length || 0;
 
   return (
@@ -21,6 +21,20 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
             </div>
           ))}
         </div>
+
+        {/* Scanning Execution Line */}
+        {isSimulating && (
+          <div style={{
+            position: 'absolute',
+            top: '20px',
+            bottom: 0,
+            left: '60px',
+            width: '2px',
+            backgroundColor: 'var(--accent-blue)',
+            zIndex: 20,
+            animation: 'scanLine 0.8s linear forwards'
+          }} />
+        )}
 
         {/* Qubit Wires */}
         {grid.map((row, rIdx) => (
@@ -112,6 +126,12 @@ const CircuitGrid = ({ grid, selectedGate, pendingCX, onCellClick }) => {
           </div>
         ))}
       </div>
+      <style>{`
+        @keyframes scanLine {
+          from { transform: translateX(0); }
+          to { transform: translateX(${numCols * 60}px); }
+        }
+      `}</style>
     </div>
   );
 };

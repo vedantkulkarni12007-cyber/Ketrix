@@ -137,8 +137,19 @@ const Lab = () => {
       setSimulationResult(null);
 
       const circuitDef = gridToCircuitDefinition(grid, numQubits, shots);
-      const result = await simulateCircuit(circuitDef);
+      const [result] = await Promise.all([
+        simulateCircuit(circuitDef),
+        new Promise(resolve => setTimeout(resolve, 800))
+      ]);
       
+      try {
+        const stats = JSON.parse(localStorage.getItem('ketrix_lab_stats') || '{"executions":0}');
+        stats.executions += 1;
+        localStorage.setItem('ketrix_lab_stats', JSON.stringify(stats));
+      } catch (storageErr) {
+        // Ignore storage errors
+      }
+
       setSimulationResult(result);
     } catch (err) {
       console.error("Simulation execution error:", err);
@@ -226,6 +237,7 @@ const Lab = () => {
                 selectedGate={selectedGate}
                 pendingCX={pendingCX}
                 onCellClick={handleCellClick}
+                isSimulating={isSimulating}
               />
             </div>
             

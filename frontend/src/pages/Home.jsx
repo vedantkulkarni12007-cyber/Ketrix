@@ -1,16 +1,56 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import BlochSphere from '../features/visualization/BlochSphere';
 
 const Home = () => {
-  // Simple state for animation logic
-  const [pulsePos, setPulsePos] = useState(0);
+  // Single-qubit state explorer logic for the Home page demo
+  const [demoState, setDemoState] = useState([
+    { real: 1, imag: 0 },
+    { real: 0, imag: 0 }
+  ]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPulsePos(p => (p >= 100 ? 0 : p + 1.5));
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
+  const applyGate = (gate) => {
+    setDemoState(prev => {
+      const v0 = prev[0];
+      const v1 = prev[1];
+      const INV_SQRT2 = 1 / Math.sqrt(2);
+      
+      switch (gate) {
+        case '0':
+          return [{ real: 1, imag: 0 }, { real: 0, imag: 0 }];
+        case '1':
+          return [{ real: 0, imag: 0 }, { real: 1, imag: 0 }];
+        case 'X':
+          return [v1, v0];
+        case 'Z':
+          return [v0, { real: -v1.real, imag: -v1.imag }];
+        case 'H':
+          return [
+            { 
+              real: (v0.real + v1.real) * INV_SQRT2, 
+              imag: (v0.imag + v1.imag) * INV_SQRT2 
+            },
+            { 
+              real: (v0.real - v1.real) * INV_SQRT2, 
+              imag: (v0.imag - v1.imag) * INV_SQRT2 
+            }
+          ];
+        default:
+          return prev;
+      }
+    });
+  };
+
+  const calculateProbabilities = () => {
+    const p0 = demoState[0].real ** 2 + demoState[0].imag ** 2;
+    const p1 = demoState[1].real ** 2 + demoState[1].imag ** 2;
+    return {
+      p0: (p0 * 100).toFixed(1),
+      p1: (p1 * 100).toFixed(1)
+    };
+  };
+
+  const probs = calculateProbabilities();
 
   return (
     <div className="container">
@@ -32,7 +72,7 @@ const Home = () => {
           </div>
           <h1 style={{ 
             margin: '0 0 1.5rem 0',
-            fontSize: '4.5rem',
+            fontSize: 'clamp(3.5rem, 5vw, 4.5rem)',
             lineHeight: '1.05',
             textTransform: 'uppercase',
             letterSpacing: '-0.02em',
@@ -49,7 +89,7 @@ const Home = () => {
             color: 'var(--text-secondary)',
             lineHeight: '1.6'
           }}>
-            Welcome to Ketrix. Construct quantum circuits, execute them on a real Qiskit Aer backend, and visualize the physics of computation in a professional learning environment.
+            Learn quantum concepts, build circuits in a full-featured laboratory, run them on a real Qiskit simulation backend, and explore complex quantum algorithms.
           </p>
 
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -58,189 +98,173 @@ const Home = () => {
                 ENTER CURRICULUM
               </button>
             </Link>
+            <Link to="/lab">
+              <button style={{ padding: '1rem 2rem', fontSize: '1rem', backgroundColor: 'transparent', color: 'var(--text-primary)', borderColor: 'var(--border-active)' }}>
+                OPEN LABORATORY
+              </button>
+            </Link>
             <Link to="/simulator">
-              <button style={{ padding: '1rem 2rem', fontSize: '1rem', backgroundColor: 'transparent', color: 'var(--text-primary)' }}>
-                OPEN SIMULATOR
+              <button style={{ padding: '1rem 2rem', fontSize: '1rem', backgroundColor: 'transparent', color: 'var(--text-primary)', border: 'none', textDecoration: 'underline' }}>
+                Simulator Config
               </button>
             </Link>
           </div>
         </div>
 
-        {/* Right Column: Animated Circuit Hero */}
-        <div style={{ flex: '1 1 500px', position: 'relative' }}>
-          <div className="sci-panel" style={{ 
-            padding: '4rem 3rem', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: '4rem', 
-            position: 'relative',
-            zIndex: 1,
-            backgroundColor: 'var(--bg-panel)'
-          }}>
+        {/* Right Column: Interactive Quantum Explorer */}
+        <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="sci-panel" style={{ padding: '0' }}>
+            <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="tech-label text-blue">LIVE STATE EXPLORER</div>
+              <div className="text-mono" style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>LOCAL MATH ENGINE</div>
+            </div>
             
-            <div className="tech-label" style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', color: 'var(--text-dim)' }}>
-              LIVE DIAGRAM // EXP-001
+            <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: 'var(--bg-panel-light)' }}>
+              <BlochSphere statevector={demoState} />
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative', marginTop: '2rem' }}>
-              <div className="tech-label" style={{ width: '40px', color: 'var(--text-secondary)' }}>q0</div>
-              <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--border-light)', position: 'relative' }}>
-                {/* The moving "particle" or evaluation front */}
-                <div style={{ 
-                  position: 'absolute', 
-                  top: '-3px', 
-                  left: `${pulsePos}%`, 
-                  width: '7px', 
-                  height: '7px', 
-                  backgroundColor: 'var(--accent-blue)',
-                  opacity: pulsePos < 80 ? 1 : 0
-                }} />
-                
-                <div style={{
-                  position: 'absolute',
-                  top: '-20px',
-                  left: '25%',
-                  width: '40px',
-                  height: '40px',
-                  backgroundColor: 'var(--bg-panel-light)',
-                  border: pulsePos > 25 ? '1px solid var(--accent-blue)' : '1px solid var(--border-light)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-mono)',
-                  color: pulsePos > 25 ? 'var(--accent-blue)' : 'var(--text-secondary)',
-                  transition: 'border-color 0.3s, color 0.3s'
-                }}>H</div>
-
-                <div style={{
-                  position: 'absolute',
-                  top: '-3px',
-                  left: '60%',
-                  width: '7px',
-                  height: '7px',
-                  backgroundColor: pulsePos > 60 ? 'var(--accent-blue)' : 'var(--border-light)',
-                  transition: 'background-color 0.3s'
-                }}></div>
-                {/* Vertical line down to q1 */}
-                <div style={{
-                  position: 'absolute',
-                  top: '0',
-                  left: '60%',
-                  width: '1px',
-                  height: '104px', // reaches q1 wire (gap is 4rem = 64px, + 40px sizes)
-                  backgroundColor: pulsePos > 60 ? 'var(--accent-blue)' : 'var(--border-light)',
-                  transition: 'background-color 0.3s'
-                }}></div>
-
-                <div style={{
-                  position: 'absolute',
-                  top: '-15px',
-                  right: '5%',
-                  width: '30px',
-                  height: '30px',
-                  backgroundColor: 'var(--bg-panel)',
-                  border: '1px solid var(--accent-amber)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--accent-amber)'
-                }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2v20M2 12h20M12 12l8-8" />
-                    <circle cx="12" cy="12" r="10" />
-                  </svg>
+            <div style={{ padding: '1.5rem', borderTop: '1px solid var(--border-light)', display: 'flex', gap: '2rem' }}>
+              <div style={{ flex: 1 }}>
+                <div className="tech-label" style={{ marginBottom: '0.5rem', color: 'var(--text-dim)' }}>PROB(0)</div>
+                <div className="text-mono text-white">{probs.p0}%</div>
+                <div style={{ height: '4px', backgroundColor: 'var(--bg-panel-light)', marginTop: '0.5rem' }}>
+                  <div style={{ height: '100%', width: `${probs.p0}%`, backgroundColor: 'var(--accent-blue)', transition: 'width 0.3s' }} />
                 </div>
               </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', position: 'relative' }}>
-              <div className="tech-label" style={{ width: '40px', color: 'var(--text-secondary)' }}>q1</div>
-              <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--border-light)', position: 'relative' }}>
-                
-                <div style={{
-                  position: 'absolute',
-                  top: '-20px',
-                  left: 'calc(60% - 20px)', // aligned with control dot
-                  width: '40px',
-                  height: '40px',
-                  backgroundColor: 'var(--bg-panel-light)',
-                  border: pulsePos > 60 ? '1px solid var(--accent-blue)' : '1px solid var(--border-light)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-mono)',
-                  color: pulsePos > 60 ? 'var(--accent-blue)' : 'var(--text-secondary)',
-                  transition: 'border-color 0.3s, color 0.3s'
-                }}>X</div>
-
-                <div style={{
-                  position: 'absolute',
-                  top: '-15px',
-                  right: '5%',
-                  width: '30px',
-                  height: '30px',
-                  backgroundColor: 'var(--bg-panel)',
-                  border: '1px solid var(--accent-amber)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--accent-amber)'
-                }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2v20M2 12h20M12 12l8-8" />
-                    <circle cx="12" cy="12" r="10" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div style={{ marginTop: '1rem', borderTop: '1px solid var(--border-light)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between' }}>
-              <div className="tech-label" style={{ color: 'var(--text-dim)' }}>
-                BELL STATE |Φ⁺⟩
-              </div>
-              <div style={{ display: 'flex', gap: '2rem' }}>
-                <div>
-                  <div className="tech-label" style={{ color: 'var(--accent-amber)', fontSize: '0.7rem' }}>M_00</div>
-                  <div className="text-mono" style={{ fontSize: '1.1rem', color: pulsePos > 80 ? 'var(--text-primary)' : 'var(--text-dim)' }}>{pulsePos > 80 ? '49.8%' : '---'}</div>
-                </div>
-                <div>
-                  <div className="tech-label" style={{ color: 'var(--accent-amber)', fontSize: '0.7rem' }}>M_11</div>
-                  <div className="text-mono" style={{ fontSize: '1.1rem', color: pulsePos > 80 ? 'var(--text-primary)' : 'var(--text-dim)' }}>{pulsePos > 80 ? '50.2%' : '---'}</div>
+              <div style={{ flex: 1 }}>
+                <div className="tech-label" style={{ marginBottom: '0.5rem', color: 'var(--text-dim)' }}>PROB(1)</div>
+                <div className="text-mono text-white">{probs.p1}%</div>
+                <div style={{ height: '4px', backgroundColor: 'var(--bg-panel-light)', marginTop: '0.5rem' }}>
+                  <div style={{ height: '100%', width: `${probs.p1}%`, backgroundColor: 'var(--accent-amber)', transition: 'width 0.3s' }} />
                 </div>
               </div>
             </div>
           </div>
+          
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button onClick={() => applyGate('0')} style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem' }}>|0⟩</button>
+            <button onClick={() => applyGate('1')} style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem' }}>|1⟩</button>
+            <button onClick={() => applyGate('X')} style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem', borderColor: 'var(--accent-blue)', color: 'var(--accent-blue)' }}>X</button>
+            <button onClick={() => applyGate('Z')} style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem', borderColor: 'var(--accent-blue)', color: 'var(--accent-blue)' }}>Z</button>
+            <button onClick={() => applyGate('H')} style={{ flex: 1, padding: '0.5rem', fontSize: '0.9rem', borderColor: 'var(--accent-amber)', color: 'var(--accent-amber)' }}>H</button>
+          </div>
         </div>
       </section>
 
-      {/* Grid Layout Features */}
-      <section style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-        gap: '2rem',
-        marginTop: '2rem',
-        paddingTop: '4rem',
-        borderTop: '1px solid var(--border-light)'
-      }}>
-        <div className="sci-panel">
-          <div className="tech-label" style={{ marginBottom: '1rem' }}>SYS.01</div>
-          <h3 style={{ marginBottom: '1rem' }}>Theoretical Foundations</h3>
-          <p>Master Dirac notation, quantum states, superposition, and entanglement through step-by-step interactive modules.</p>
-        </div>
-        
-        <div className="sci-panel">
-          <div className="tech-label" style={{ marginBottom: '1rem' }}>SYS.02</div>
-          <h3 style={{ marginBottom: '1rem' }}>Real Simulation</h3>
-          <p>Stop reading text and start measuring. Every lesson is backed by a live connection to the Qiskit Aer simulation engine.</p>
-        </div>
-
-        <div className="sci-panel">
-          <div className="tech-label" style={{ marginBottom: '1rem' }}>SYS.03</div>
-          <h3 style={{ marginBottom: '1rem' }}>Laboratory Environment</h3>
-          <p>Construct complex quantum circuits in an unrestricted sandbox to observe state vectors and measurement distributions.</p>
+      {/* Content Sections */}
+      
+      {/* 1. Explore the Quantum World */}
+      <section style={{ padding: '6rem 0', borderTop: '1px solid var(--border-light)' }}>
+        <div className="tech-label text-blue" style={{ marginBottom: '1rem' }}>MODULE 01</div>
+        <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem' }}>Explore the Quantum World.</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
+          <div className="sci-panel" style={{ padding: '2rem' }}>
+            <h3 style={{ marginBottom: '1rem' }}>Superposition</h3>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>Observe how quantum systems exist in multiple states simultaneously until measured, forming the basis of quantum parallelism.</p>
+          </div>
+          <div className="sci-panel" style={{ padding: '2rem' }}>
+            <h3 style={{ marginBottom: '1rem' }}>Entanglement</h3>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>Create Bell states and observe non-local correlations that defy classical probability and form the backbone of teleportation.</p>
+          </div>
+          <div className="sci-panel" style={{ padding: '2rem' }}>
+            <h3 style={{ marginBottom: '1rem' }}>Interference</h3>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>Utilize constructive and destructive wave interference to amplify correct answers and cancel out incorrect ones.</p>
+          </div>
+          <div className="sci-panel" style={{ padding: '2rem' }}>
+            <h3 style={{ marginBottom: '1rem' }}>Measurement</h3>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>Understand the probabilistic collapse of statevectors into classical bits through rigorous simulation runs.</p>
+          </div>
         </div>
       </section>
+
+      {/* 2. Build and Experiment */}
+      <section style={{ padding: '6rem 0', borderTop: '1px solid var(--border-light)', display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center' }}>
+        <div style={{ flex: '1 1 400px' }}>
+          <div className="tech-label text-blue" style={{ marginBottom: '1rem' }}>MODULE 02</div>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Build and Experiment.</h2>
+          <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '2rem' }}>
+            Ketrix includes a fully unrestricted Quantum Laboratory. Compose complex multi-qubit circuits using a visual grid editor. 
+            Dispatch your circuits to the Qiskit Aer backend and instantly analyze statevectors, measurement histograms, and classical conditional logic.
+          </p>
+          <Link to="/lab">
+            <button style={{ borderColor: 'var(--accent-blue)', color: 'var(--accent-blue)' }}>ENTER THE LAB &rarr;</button>
+          </Link>
+        </div>
+        <div className="sci-panel" style={{ flex: '1 1 400px', padding: '2rem', backgroundColor: 'var(--bg-panel-light)' }}>
+          <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '1rem', marginBottom: '1rem' }}>
+            <div className="tech-label" style={{ width: '40px' }}>q0</div>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+              <div style={{ height: '1px', backgroundColor: 'var(--border-light)', width: '20px' }} />
+              <div style={{ width: '32px', height: '32px', backgroundColor: 'var(--bg-dark)', border: '1px solid var(--accent-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-blue)', fontFamily: 'var(--font-mono)' }}>H</div>
+              <div style={{ height: '1px', backgroundColor: 'var(--border-light)', width: '20px' }} />
+              <div style={{ width: '12px', height: '12px', backgroundColor: 'var(--accent-blue)', borderRadius: '50%' }} />
+              <div style={{ height: '1px', backgroundColor: 'var(--border-light)', flex: 1 }} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <div className="tech-label" style={{ width: '40px' }}>q1</div>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+              <div style={{ height: '1px', backgroundColor: 'var(--border-light)', width: '72px' }} />
+              <div style={{ width: '32px', height: '32px', backgroundColor: 'var(--bg-dark)', border: '1px solid var(--accent-blue)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-blue)', fontFamily: 'var(--font-mono)' }}>X</div>
+              <div style={{ height: '1px', backgroundColor: 'var(--border-light)', flex: 1 }} />
+            </div>
+          </div>
+          <div style={{ width: '1px', height: '40px', backgroundColor: 'var(--accent-blue)', position: 'relative', left: '104px', top: '-46px' }} />
+        </div>
+      </section>
+
+      {/* 3. Algorithms & Curriculum */}
+      <section style={{ padding: '6rem 0', borderTop: '1px solid var(--border-light)' }}>
+        <div className="tech-label text-blue" style={{ marginBottom: '1rem' }}>MODULE 03</div>
+        <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem' }}>Explore Quantum Algorithms.</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          
+          <div className="sci-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
+            <div className="tech-label" style={{ marginBottom: '1rem', color: 'var(--text-dim)' }}>LESSON 13</div>
+            <h3 style={{ marginBottom: '1rem' }}>Deutsch-Jozsa</h3>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', flex: 1 }}>
+              Determine if an oracle function is constant or balanced in a single quantum evaluation, proving deterministic quantum advantage.
+            </p>
+            <Link to="/learn/deutsch-jozsa" style={{ marginTop: '2rem' }}>
+              <button style={{ width: '100%' }}>STUDY ALGORITHM</button>
+            </Link>
+          </div>
+
+          <div className="sci-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
+            <div className="tech-label" style={{ marginBottom: '1rem', color: 'var(--text-dim)' }}>LESSON 14</div>
+            <h3 style={{ marginBottom: '1rem' }}>Grover's Search</h3>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', flex: 1 }}>
+              Use amplitude amplification to invert and magnify the probability of finding a marked item in an unstructured search space.
+            </p>
+            <Link to="/learn/grovers" style={{ marginTop: '2rem' }}>
+              <button style={{ width: '100%' }}>STUDY ALGORITHM</button>
+            </Link>
+          </div>
+
+          <div className="sci-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
+            <div className="tech-label" style={{ marginBottom: '1rem', color: 'var(--text-dim)' }}>LESSON 15</div>
+            <h3 style={{ marginBottom: '1rem' }}>Teleportation</h3>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', flex: 1 }}>
+              Transfer an unknown quantum state across space using a classical communication channel and a pre-shared EPR pair.
+            </p>
+            <Link to="/learn/teleportation" style={{ marginTop: '2rem' }}>
+              <button style={{ width: '100%' }}>STUDY ALGORITHM</button>
+            </Link>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <section style={{ padding: '6rem 0 2rem 0', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>Ready to initialize?</h2>
+        <Link to="/learn">
+          <button style={{ backgroundColor: 'var(--accent-blue)', color: 'var(--bg-dark)', padding: '1.5rem 3rem', fontSize: '1.2rem', fontWeight: 'bold' }}>
+            START THE CURRICULUM
+          </button>
+        </Link>
+      </section>
+
     </div>
   );
 };

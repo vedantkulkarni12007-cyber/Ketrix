@@ -166,11 +166,11 @@ const BlochSphere = ({ statevector, title, description }) => {
             <text x={poleS.u} y={poleS.v} fill="var(--text-secondary)" fontSize="14" fontFamily="var(--font-mono)" textAnchor="middle" dominantBaseline="middle">|1⟩</text>
 
             {/* State Projection Lines (depth cues) */}
-            <path d={drawPath3D([ {x, y, z}, {x, y, z: 0}, {x:0, y:0, z:0} ])} fill="none" stroke="var(--accent-blue)" strokeWidth="1" strokeDasharray="2 2" opacity="0.4" />
+            <path d={drawPath3D([ {x, y, z}, {x, y, z: 0}, {x:0, y:0, z:0} ])} fill="none" stroke="var(--accent-blue)" strokeWidth="1" strokeDasharray="2 2" opacity="0.4" style={{ transition: 'd 0.5s ease-out' }} />
 
             {/* State Vector */}
-            <line x1="0" y1="0" x2={stateProj.u} y2={stateProj.v} stroke="var(--accent-blue)" strokeWidth="2.5" strokeLinecap="round" />
-            <circle cx={stateProj.u} cy={stateProj.v} r="4" fill="var(--accent-blue)" />
+            <line x1="0" y1="0" x2={stateProj.u} y2={stateProj.v} stroke="var(--accent-blue)" strokeWidth="2.5" strokeLinecap="round" style={{ transition: 'x2 0.5s ease-out, y2 0.5s ease-out' }} />
+            <circle cx={stateProj.u} cy={stateProj.v} r="4" fill="var(--accent-blue)" style={{ transition: 'cx 0.5s ease-out, cy 0.5s ease-out' }} />
           </svg>
           
           {/* Coordinates Overlay */}

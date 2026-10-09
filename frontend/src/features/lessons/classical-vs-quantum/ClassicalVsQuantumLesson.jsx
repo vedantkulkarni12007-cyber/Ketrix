@@ -254,7 +254,7 @@ const ClassicalVsQuantumLesson = () => {
           </div>
         ) : (
           <button 
-            onClick={() => setLessonComplete(true)}
+            onClick={() => { setLessonComplete(true); try { const id = window.location.pathname.split('/').pop(); const saved = JSON.parse(localStorage.getItem('ketrix_completed_lessons') || '[]'); if(!saved.includes(id)) { saved.push(id); localStorage.setItem('ketrix_completed_lessons', JSON.stringify(saved)); } } catch(e){} }}
             style={{ borderColor: 'var(--accent-green)', color: 'var(--accent-green)' }}
           >
             MARK MODULE COMPLETE
