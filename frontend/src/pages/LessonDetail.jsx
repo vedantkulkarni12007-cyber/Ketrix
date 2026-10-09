@@ -41,12 +41,15 @@ const LessonDetail = () => {
   if (lessonId === 'teleportation') return <TeleportationLesson />;
 
   return (
-    <div className="container" style={{ maxWidth: '900px' }}>
-      <Link to="/learn" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', textTransform: 'uppercase' }}>
+    <div className="container" style={{ maxWidth: '1000px', paddingBottom: '6rem' }}>
+      <Link to="/learn" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', textTransform: 'uppercase', color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}
+      onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
+      onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+      >
         <span>&larr;</span> BACK TO CURRICULUM
       </Link>
       
-      <div className="sci-panel" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+      <div className="sci-panel" style={{ textAlign: 'center', padding: '6rem 2rem' }}>
         <div className="tech-label text-amber" style={{ marginBottom: '1rem' }}>SYSTEM WARNING</div>
         <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', textTransform: 'uppercase' }}>{lessonId.replace(/-/g, ' ')}</h1>
         <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
