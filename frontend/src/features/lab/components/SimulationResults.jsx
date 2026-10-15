@@ -2,6 +2,7 @@ const SimulationResults = ({ result }) => {
   if (!result) return null;
 
   const { num_qubits, measurement_counts, metadata } = result;
+  const counts = measurement_counts || {};
   const actualShots = metadata?.shots || 1000;
 
   const numStates = Math.pow(2, num_qubits);
@@ -14,7 +15,8 @@ const SimulationResults = ({ result }) => {
     qiskitToTextbook[textbookBin] = qiskitBin;
   }
 
-  const maxCount = Math.max(...Object.values(measurement_counts), 0) || actualShots;
+  const countValues = Object.values(counts);
+  const maxCount = (countValues.length > 0 ? Math.max(...countValues, 0) : 0) || actualShots;
 
   return (
     <div className="sci-panel" style={{ marginTop: '2rem' }}>
@@ -23,7 +25,7 @@ const SimulationResults = ({ result }) => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {basisStates.map(state => {
           const qiskitKey = qiskitToTextbook[state];
-          const count = measurement_counts[qiskitKey] || 0;
+          const count = counts[qiskitKey] || 0;
           const probability = count / actualShots;
           const percentage = (probability * 100).toFixed(1);
           

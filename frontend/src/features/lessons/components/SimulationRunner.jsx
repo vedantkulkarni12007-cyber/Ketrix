@@ -18,7 +18,7 @@ const SimulationRunner = ({ circuitDef, buttonText = "EXECUTE SIMULATION", onSim
         onSimulationComplete(data);
       }
     } catch (err) {
-      setError(err.toString());
+      setError(err?.message || err.toString());
     } finally {
       setLoading(false);
     }

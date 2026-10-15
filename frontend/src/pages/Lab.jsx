@@ -147,14 +147,15 @@ const Lab = () => {
         const stats = JSON.parse(localStorage.getItem('ketrix_lab_stats') || '{"executions":0}');
         stats.executions += 1;
         localStorage.setItem('ketrix_lab_stats', JSON.stringify(stats));
-      } catch (storageErr) {
+      } catch {
         // Ignore storage errors
       }
 
       setSimulationResult(result);
     } catch (err) {
       console.error("Simulation execution error:", err);
-      setSimulationError("Unable to execute circuit. Please verify your operations and try again.");
+      const message = (typeof err === 'string' ? err : err?.message) || "Unable to execute circuit. Please verify your operations and try again.";
+      setSimulationError(message);
     } finally {
       setIsSimulating(false);
     }
@@ -254,8 +255,8 @@ const Lab = () => {
           {simulationError && (
             <div className="sci-panel" style={{ borderColor: 'var(--accent-red)' }}>
               <div className="tech-label text-red" style={{ marginBottom: '0.5rem' }}>SIMULATION FAULT</div>
-              <p className="text-white" style={{ margin: 0, fontSize: '1.1rem' }}>{simulationError}</p>
-              <p style={{ marginTop: '1rem', color: 'var(--text-dim)', fontSize: '0.9rem' }}>Check that the simulation backend is running and try again.</p>
+              <p className="text-white" style={{ margin: 0, fontSize: '1.1rem', wordBreak: 'break-word' }}>{simulationError}</p>
+              <p style={{ marginTop: '1rem', color: 'var(--text-dim)', fontSize: '0.9rem' }}>Check your circuit operations and verify that the backend simulation service is active.</p>
             </div>
           )}
 

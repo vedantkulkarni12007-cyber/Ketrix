@@ -5,6 +5,7 @@ import assert from 'assert';
 import { gridToCircuitDefinition } from './src/features/lab/utils/circuitParser.js';
 import BlochSphere from './src/features/visualization/BlochSphere.jsx';
 import CoreStateVisualizer from './src/features/visualization/CoreStateVisualizer.jsx';
+import { normalizeApiBaseUrl, getApiRootUrl, formatErrorMessage } from './src/services/quantumApi.js';
 
 async function runTests() {
   console.log('--- FRONTEND TESTS ---');
@@ -120,6 +121,79 @@ async function runTests() {
       console.error(html);
       throw e;
     }
+  });
+
+  // 7. API Base URL normalization handles production, local, missing, and malformed prefixes.
+  runTest('normalizeApiBaseUrl correctly formats API URLs', () => {
+    // Production Render URL missing /api/v1
+    assert.strictEqual(
+      normalizeApiBaseUrl('https://ketrix-api.onrender.com'),
+      'https://ketrix-api.onrender.com/api/v1'
+    );
+    // Production URL with trailing slash
+    assert.strictEqual(
+      normalizeApiBaseUrl('https://ketrix-api.onrender.com/'),
+      'https://ketrix-api.onrender.com/api/v1'
+    );
+    // Already includes /api/v1
+    assert.strictEqual(
+      normalizeApiBaseUrl('https://ketrix-api.onrender.com/api/v1'),
+      'https://ketrix-api.onrender.com/api/v1'
+    );
+    // Trailing slash on /api/v1/
+    assert.strictEqual(
+      normalizeApiBaseUrl('https://ketrix-api.onrender.com/api/v1/'),
+      'https://ketrix-api.onrender.com/api/v1'
+    );
+    // Localhost base
+    assert.strictEqual(
+      normalizeApiBaseUrl('http://localhost:8000'),
+      'http://localhost:8000/api/v1'
+    );
+    // Null/undefined fallback
+    assert.strictEqual(
+      normalizeApiBaseUrl(undefined),
+      'http://localhost:8000/api/v1'
+    );
+    assert.strictEqual(
+      normalizeApiBaseUrl(''),
+      'http://localhost:8000/api/v1'
+    );
+  });
+
+  // 8. getApiRootUrl derives the root path for health checks.
+  runTest('getApiRootUrl correctly strips /api/v1', () => {
+    assert.strictEqual(
+      getApiRootUrl('https://ketrix-api.onrender.com/api/v1'),
+      'https://ketrix-api.onrender.com'
+    );
+    assert.strictEqual(
+      getApiRootUrl('http://localhost:8000/api/v1'),
+      'http://localhost:8000'
+    );
+  });
+
+  // 9. formatErrorMessage produces helpful error messages instead of generic crash text.
+  runTest('formatErrorMessage extracts useful errors', () => {
+    // String error
+    assert.strictEqual(formatErrorMessage('Custom error'), 'Custom error');
+    // 404 endpoint not found
+    assert(formatErrorMessage({ response: { status: 404 } }).includes('404'));
+    // FastAPI validation array (422)
+    const pydanticError = {
+      response: {
+        status: 422,
+        data: {
+          detail: [
+            { loc: ['body', 'operations', 0, 'gate'], msg: 'CX gate requires a control qubit' }
+          ]
+        }
+      }
+    };
+    const msg = formatErrorMessage(pydanticError);
+    assert(msg.includes('CX gate requires a control qubit'));
+    // Network Error
+    assert(formatErrorMessage({ message: 'Network Error' }).includes('Network Error'));
   });
 
   console.log(`\nTests: ${passed} passed, ${failed} failed`);
