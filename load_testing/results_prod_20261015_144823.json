@@ -1,0 +1,28 @@
+{
+  "target": "https://ketrix-api.onrender.com",
+  "environment": "prod",
+  "timestamp_utc": "2026-10-15T14:48:23.106876+00:00",
+  "probe": {
+    "cold_start_probe_ms": 969.84,
+    "warm_baseline_probe_ms": 886.76
+  },
+  "stages": [
+    {
+      "concurrency": 10,
+      "total_requests": 22,
+      "successful_requests": 22,
+      "failed_requests": 0,
+      "timeouts": 0,
+      "http_errors": 0,
+      "duration_sec": 9.81,
+      "rps": 2.24,
+      "metrics": {
+        "min": 536.32,
+        "max": 3997.78,
+        "mean": 3312.58,
+        "median": 3766.38,
+        "p95": 3809.02
+      }
+    }
+  ]
+}

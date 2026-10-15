@@ -1,0 +1,62 @@
+{
+  "target": "https://ketrix-api.onrender.com",
+  "environment": "prod",
+  "timestamp_utc": "2026-10-15T14:45:22.822559Z",
+  "probe": {
+    "cold_start_probe_ms": 599.68,
+    "warm_baseline_probe_ms": 695.35
+  },
+  "stages": [
+    {
+      "concurrency": 1,
+      "total_requests": 6,
+      "successful_requests": 6,
+      "failed_requests": 0,
+      "timeouts": 0,
+      "http_errors": 0,
+      "duration_sec": 11.01,
+      "rps": 0.54,
+      "metrics": {
+        "min": 501.2,
+        "max": 1007.8,
+        "mean": 833.72,
+        "median": 920.71,
+        "p95": 1007.8
+      }
+    },
+    {
+      "concurrency": 2,
+      "total_requests": 13,
+      "successful_requests": 13,
+      "failed_requests": 0,
+      "timeouts": 0,
+      "http_errors": 0,
+      "duration_sec": 11.4,
+      "rps": 1.14,
+      "metrics": {
+        "min": 416.67,
+        "max": 1003.09,
+        "mean": 700.01,
+        "median": 694.75,
+        "p95": 1003.09
+      }
+    },
+    {
+      "concurrency": 5,
+      "total_requests": 18,
+      "successful_requests": 18,
+      "failed_requests": 0,
+      "timeouts": 0,
+      "http_errors": 0,
+      "duration_sec": 8.51,
+      "rps": 2.11,
+      "metrics": {
+        "min": 502.27,
+        "max": 2094.83,
+        "mean": 1359.41,
+        "median": 1405.21,
+        "p95": 2094.83
+      }
+    }
+  ]
+}
