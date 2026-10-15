@@ -4,10 +4,10 @@ import { curriculumData } from '../data/curriculum';
 import FadeIn from '../components/FadeIn';
 
 const Dashboard = () => {
-  const [completedLessons, setCompletedLessons] = useState(() => {
+  const [completedLessons] = useState(() => {
     return JSON.parse(localStorage.getItem('ketrix_completed_lessons') || '[]');
   });
-  const [labStats, setLabStats] = useState(() => {
+  const [labStats] = useState(() => {
     return JSON.parse(localStorage.getItem('ketrix_lab_stats') || '{"executions":0}');
   });
 
@@ -62,6 +62,22 @@ const Dashboard = () => {
             {masteryScore > 0 ? `${masteryScore}%` : '--'}
           </div>
         </div>
+
+        <div className="sci-panel" style={{ padding: '2rem' }}>
+          <div className="tech-label" style={{ marginBottom: '1rem', color: 'var(--text-dim)' }}>CHALLENGES VERIFIED</div>
+          <div className="text-mono" style={{ fontSize: '3rem', color: 'var(--accent-green)' }}>
+            {(() => {
+              try {
+                const challenges = JSON.parse(localStorage.getItem('ketrix_completed_challenges') || '{}');
+                const count = Object.values(challenges).filter(c => c && c.completed).length;
+                return `${count.toString().padStart(2, '0')}`;
+              } catch {
+                return '00';
+              }
+            })()}
+            <span style={{ fontSize: '1.5rem', color: 'var(--text-dim)' }}>/04</span>
+          </div>
+        </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '4rem' }}>
@@ -90,6 +106,16 @@ const Dashboard = () => {
         <div>
           <h2 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>Quick Actions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <Link to="/challenges">
+              <div className="sci-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'border-color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'} onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', marginBottom: '0.5rem' }}>Quantum Challenges</h3>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Verify state preparation circuits against physical targets.</div>
+                </div>
+                <div style={{ color: 'var(--accent-blue)' }}>&rarr;</div>
+              </div>
+            </Link>
+
             <Link to="/lab">
               <div className="sci-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'border-color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-blue)'} onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}>
                 <div>
